@@ -24,6 +24,7 @@ using namespace std;
 
 void gra()
 {
+    srand(time(NULL));
     //Tekstury
     sf::Texture textureStatek = loadTexture("./../spacehero/spaceship.png");
     sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
@@ -53,18 +54,20 @@ void gra()
     Spaceship statek(textureStatek, rozmiar_x, rozmiar_y);
 
     //test pocisk
-    shot pocisk(textureShot, rozmiar_x, rozmiar_y);
+    //shot pocisk(textureShot, statek);
 
 
 
     //Wspolny kontener na przeciwnikow
     std::vector<std::unique_ptr<AnimowaneObiekty>> przeciwnicy;
 
-    //Wspolny kontener na pocisk i statek
-    std::vector<std::unique_ptr<AnimowaneObiekty>> statek_pocisk;
+    //Kontener pociskow
+    std::vector<std::unique_ptr<AnimowaneObiekty>> pociski;
 
     //Dodanie przeciwnikow do kontenera
     dodaj_przeciwnikow_1(przeciwnicy, textureUfo, textureAsteroida, rozmiar_x, rozmiar_y);
+
+    dodaj_pociski(pociski, textureShot, statek);
 
       // run the program as long as the window is open
     sf::Clock clock;
@@ -80,39 +83,70 @@ void gra()
               if (event.type == sf::Event::Closed)
                   window.close();
               //Sterowanie statkiem za pomoca klawiszy
+
               if(event.type == sf::Event::KeyPressed)
               {
-                  statek.sterowanie_klawiszami(event);
 
+                  for(auto itr=pociski.begin(); itr != pociski.end(); itr++)
+                  {
+                      shot *pocisk = dynamic_cast<shot *>(itr->get());
+                              if(pocisk != nullptr){
+                                  pocisk->strzal(event, statek);
+                              }
+                  }
 
               }
-              if(event.type == sf::Event::KeyPressed)
-              {
-                  pocisk.strzal(event);
 
-              }
 
           }
-              statek.poruszaj(elapsed, windowBounds,rozmiar_x, rozmiar_y);
-              pocisk.poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+              //SEKCJA OD PORUSZANIA
+              if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+              {
+               statek.ruch_po_x(elapsed, window,-1);
+              }
+              else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+              {
+              statek.ruch_po_x(elapsed, window, 1);
+              }
+
+
+              for(auto &poc : pociski)
+              {
+              poc->poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+              }
+
+
               for(auto &el : przeciwnicy)
               {
                   el->poruszaj(elapsed,windowBounds, rozmiar_x, rozmiar_y);
               }
 
+              //zderzenia(pociski, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida);
+
+
+//             if(pocisk.pobierz_liczbe_punktow() >= 40)
+//             {
+//                 window.close();
+//                 std::cout << "WYGRANA!" << std::endl;
+//             }
+
           // clear the window with black color
           window.clear(sf::Color::Black);
 
-          // draw everything here...
+          //RYSOWANIE
           window.draw(spritetlo);
           window.draw(statek);
-          //window.draw(pocisk);
+
 
           for(auto &p : przeciwnicy)
           {
               window.draw(*p);
           }
 
+          for(auto &p : pociski)
+          {
+              window.draw(*p);
+          }
 
           // end the current frame
           window.display();
@@ -181,6 +215,45 @@ void autor()
     //Utworzenie okna
     sf::RenderWindow window(sf::VideoMode(rozmiar_x, rozmiar_y), "SpaceHero");
 
+    //Gif
+    sf::Texture giff = loadTexture("./../spacehero/sweet.gif");
+
+    sf::Sprite giff_s;
+    giff_s.setTexture(giff);
+    giff_s.setPosition(rozmiar_x/2 - 100, rozmiar_y/2);
+    giff_s.setScale(1.5,1.5);
+
+    //Fonty
+    sf::Font font;
+    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    {
+        std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
+    }
+
+    sf::Text text;
+    sf::Text text_2;
+    sf::Text text_3;
+
+    //Stworzenie fontu i ustawienie
+    text.setFont(font);
+    text.setString("AUTOR");
+    text.setCharacterSize(24);
+    text.setFillColor(sf::Color::Red);
+    text.setStyle(sf::Text::Bold);
+    //Opis autora
+    text_2.setFont(font);
+    text_2.setString("Maciej Dyks");
+    text_2.setCharacterSize(24);
+    text_2.setFillColor(sf::Color::Red);
+    text_2.setStyle(sf::Text::Bold);
+    //Rok powstania
+    text_3.setFont(font);
+    text_3.setString("Gra powstala w 2022 roku, II semestr PSiO");
+    text_3.setCharacterSize(24);
+    text_3.setFillColor(sf::Color::Red);
+    text_3.setStyle(sf::Text::Bold);
+
+
     //Granice okna
     sf::IntRect windowBounds(0, 0, window.getSize().x, window.getSize().y);
 
@@ -190,6 +263,11 @@ void autor()
     spritetlo.setTexture(textureTlo);
     spritetlo.setScale(1.0,1.0);
     spritetlo.setTextureRect(windowBounds);
+
+
+    text.setPosition(rozmiar_x/2 - 50, rozmiar_y/2 - rozmiar_y/2);
+    text_2.setPosition(rozmiar_x/2 - 75, rozmiar_y/2 - rozmiar_y/2 + 25);
+    text_3.setPosition(rozmiar_x/2 - 300, rozmiar_y/2 - rozmiar_y/2 + 65);
 
     while (window.isOpen()) {
         // check all the window's events that were triggered since the last iteration of the loop
@@ -210,6 +288,10 @@ void autor()
 
         // draw everything here...
         window.draw(spritetlo);
+        window.draw(text);
+        window.draw(text_2);
+        window.draw(text_3);
+        window.draw(giff_s);
 
 
 

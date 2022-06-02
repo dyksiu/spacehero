@@ -13,5 +13,11 @@ public:
 
     //Metody od poruszania statku
     void poruszaj(const sf::Time &elapsed,const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y);
-    void sterowanie_klawiszami(const sf::Event &event);
+
+    void ruch_po_x(const sf::Time &elapsed, const sf::RenderWindow &window, int predkosc_x);
+
+
+
+
+
 };

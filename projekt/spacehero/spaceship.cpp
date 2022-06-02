@@ -5,6 +5,12 @@ Spaceship::Spaceship(const sf::Texture &texture, int rozmiar_x, int rozmiar_y)
    zresetuj_statek(texture, rozmiar_x, rozmiar_y);
 }
 
+//Metoda wirtualna
+void Spaceship::poruszaj(const sf::Time &elapsed,const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y)
+{
+
+}
+
 void Spaceship::zresetuj_statek(const sf::Texture &texture, int rozmiar_x, int rozmiar_y)
 {
     setTexture(texture);
@@ -16,23 +22,23 @@ void Spaceship::zresetuj_statek(const sf::Texture &texture, int rozmiar_x, int r
 
 }
 
-void Spaceship::poruszaj(const sf::Time &elapsed,const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y)
+void Spaceship::ruch_po_x(const sf::Time &elapsed, const sf::RenderWindow &window, int predkosc_x)
 {
+    sf::FloatRect rectangle_bounds = getGlobalBounds();
 
-    move(predkosc_x_ * elapsed.asSeconds(), predkosc_y_ * elapsed.asSeconds());
+    float ruch_x = elapsed.asSeconds()*predkosc_x*500;
+
+    if((rectangle_bounds.left + ruch_x <= 0))
+    {
+        return;
+    }
+    if(rectangle_bounds.left + rectangle_bounds.width + ruch_x > window.getSize().x)
+    {
+        return;
+    }
+
+    move(ruch_x, 0);
+
 }
 
-void Spaceship::sterowanie_klawiszami(const sf::Event &event)
-{
-    float predkosc = 200;
-
-   if((event.key.code == sf::Keyboard::A))
-    {
-        predkosc_x_ = -predkosc;
-    }
-    else if(event.key.code == sf::Keyboard::D)
-    {
-        predkosc_x_ = predkosc;
-    }
-   }
 

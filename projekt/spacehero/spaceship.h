@@ -16,8 +16,11 @@ public:
 
     void ruch_po_x(const sf::Time &elapsed, const sf::RenderWindow &window, int predkosc_x);
 
+    //Metody obslugujace punkty
+    int pobierz_liczbe_punktow();
+    void dodaj_punkty(int punkty_do_dodania);
 
 
-
-
+private:
+    int punkty = 0;
 };

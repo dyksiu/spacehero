@@ -13,12 +13,8 @@ public:
     void poruszaj(const sf::Time &elapsed, const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y);
     void strzal(const sf::Event &event, Spaceship &statek);
 
-    //Metody obslugujace punkty
-    int pobierz_liczbe_punktow() const;
-    void dodaj_punkty(int punkty_do_dodania);
+    void usun_pocisk(std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski);
 
-private:
-    int punkty;
 
 };
 

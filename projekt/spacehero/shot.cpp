@@ -25,18 +25,12 @@ void shot::strzal(const sf::Event &event, Spaceship &statek)
     if(event.key.code == sf::Keyboard::Space)
     {
         predkosc_y_ = -predkosc_pocisku;
-        setPosition(statek.getPosition().x, statek.getPosition().y);
+        setPosition(statek.getPosition().x+30, statek.getPosition().y);
+
         //this->setOrigin(statek.getGlobalBounds().width/2, statek.getGlobalBounds().height/2);
     }
 }
 
-//Obsluga punktow
-int shot::pobierz_liczbe_punktow() const
-{
-    return punkty;
-}
 
-void shot::dodaj_punkty(int punkty_do_dodania)
-{
-    punkty += punkty_do_dodania;
-}
+
+

@@ -41,4 +41,15 @@ void Spaceship::ruch_po_x(const sf::Time &elapsed, const sf::RenderWindow &windo
 
 }
 
+//Obsluga punktow
+int Spaceship::pobierz_liczbe_punktow()
+{
+    return punkty;
+}
+
+void Spaceship::dodaj_punkty(int punkty_do_dodania)
+{
+    punkty += punkty_do_dodania;
+}
+
 

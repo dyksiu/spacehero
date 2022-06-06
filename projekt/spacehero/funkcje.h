@@ -32,6 +32,7 @@ sf::Texture loadTexture(const std::string &nazwa_pliku)
         std::cerr << "Nie udalo sie wczytac pliku!" << std::endl;
     }
     return texture;
+
 }
 
 //Funkcja odpowiedzialna za kolizje przeciwnikow
@@ -82,46 +83,49 @@ void dodaj_pociski(std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, cons
        pociski.emplace_back(std::make_unique<shot>(textureShot, statek));
    }
 }
+
+
 //Funkcja odpowiedzialna za zderzenia z pociskiem
-void zderzenia(std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, std::vector<std::unique_ptr<AnimowaneObiekty>> &obiekty, int rozmiar_x, int rozmiar_y, sf::Texture &textureUfo, sf::Texture &textureAsteroid)
+void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, std::vector<std::unique_ptr<AnimowaneObiekty>> &obiekty, int rozmiar_x, int rozmiar_y, sf::Texture &textureUfo, sf::Texture &textureAsteroid)
 {
-    for(auto itr = obiekty.begin(); itr != obiekty.end();)
+
+    for(auto itr1 = pociski.begin(); itr1 != pociski.end(); itr1++)
     {
-        for(auto itr2 = pociski.begin(); itr2 != pociski.end();)
+        shot *pociski = dynamic_cast<shot *>(itr1->get());
+        for(auto itr2 = obiekty.begin(); itr2 != obiekty.end(); itr2++)
         {
-            shot *pocisk = dynamic_cast<shot *>(itr2->get());
-            if(pocisk != nullptr){
-            if((*itr2)->getGlobalBounds().intersects((*itr)->getGlobalBounds()))
-        {
-            Ufo *ufo = dynamic_cast<Ufo *>(itr->get());
-            if(ufo != nullptr)
-            {
-                pocisk->dodaj_punkty(10);
-                itr = obiekty.erase(itr);
-                itr2 = pociski.erase(itr2);
-                std::cout << "ZNISZCZONO UFO! +10 PKT" << std::endl;
+            Ufo *ufo = dynamic_cast<Ufo *>(itr2->get());
+          if(ufo != nullptr)
+          {
+              if((*itr1)->getGlobalBounds().intersects((*itr2)->getGlobalBounds()))
+              {
+              statek.dodaj_punkty(10);
+              itr2 = obiekty.erase(itr2);
 
+              itr1--;
 
-            }
-            Asteroid *asteroid = dynamic_cast<Asteroid *>(itr->get());
-            if(asteroid != nullptr)
-            {
-                pocisk->dodaj_punkty(20);
-                itr = obiekty.erase(itr);
-                itr2 = pociski.erase(itr2);
-                std::cout << "ZNISZCZONO ASTEROIDE! +20 PKT" << std::endl;                
-            }
-            }
-            else
-            {
-             itr++;
-
-            }
+              std::cout << "Zniszczono ufo, +10 PKT!" <<std::endl;
+              break;
+              }
         }
-        else
-        {
-         itr2++;
+          Asteroid *asteroid = dynamic_cast<Asteroid *>(itr2->get());
+          if(asteroid != nullptr)
+          {
+              if((*itr1)->getGlobalBounds().intersects((*itr2)->getGlobalBounds()))
+              {
+                  statek.dodaj_punkty(20);
+                  //obiekty.erase(itr2);
+                  itr2 = obiekty.erase(itr2);
+
+
+                  itr1--;
+
+                  std::cout << "Zniszczono asteroide, +20 PKT!" <<std::endl;
+                  break;
+              }
+
         }
-      }
+        }
     }
 }
+

@@ -67,6 +67,7 @@ DIST          =  AnimowaneObiekty.h \
 		StatyczneObiekty.h \
 		asteroid.h \
 		funkcje.h \
+		okna.h \
 		przycisk.h \
 		shot.h \
 		spaceship.h \
@@ -198,10 +199,28 @@ debug/asteroid.o: ../spacehero/asteroid.cpp ../spacehero/asteroid.h \
 		C:/SFML-2.5.1/include/SFML/Graphics/Glsl.inl \
 		C:/SFML-2.5.1/include/SFML/Graphics/Sprite.hpp \
 		C:/SFML-2.5.1/include/SFML/Graphics/Text.hpp \
-		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp
+		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/InputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Export.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Listener.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Music.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundStream.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundSource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/AlResource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/OutputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Sound.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBufferRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.inl \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileReader.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileWriter.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\asteroid.o ..\spacehero\asteroid.cpp
 
-debug/main.o: ../spacehero/main.cpp C:/SFML-2.5.1/include/SFML/Graphics.hpp \
+debug/main.o: ../spacehero/main.cpp ../spacehero/okna.h \
+		C:/SFML-2.5.1/include/SFML/Graphics.hpp \
 		C:/SFML-2.5.1/include/SFML/Window.hpp \
 		C:/SFML-2.5.1/include/SFML/System.hpp \
 		C:/SFML-2.5.1/include/SFML/Config.hpp \
@@ -275,6 +294,23 @@ debug/main.o: ../spacehero/main.cpp C:/SFML-2.5.1/include/SFML/Graphics.hpp \
 		C:/SFML-2.5.1/include/SFML/Graphics/Sprite.hpp \
 		C:/SFML-2.5.1/include/SFML/Graphics/Text.hpp \
 		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/InputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Export.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Listener.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Music.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundStream.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundSource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/AlResource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/OutputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Sound.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBufferRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.inl \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileReader.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileWriter.hpp \
 		../spacehero/AnimowaneObiekty.h \
 		../spacehero/spaceship.h \
 		../spacehero/ufo.h \
@@ -438,7 +474,25 @@ debug/shot.o: ../spacehero/shot.cpp ../spacehero/shot.h \
 		C:/SFML-2.5.1/include/SFML/Graphics/Glsl.inl \
 		C:/SFML-2.5.1/include/SFML/Graphics/Sprite.hpp \
 		C:/SFML-2.5.1/include/SFML/Graphics/Text.hpp \
-		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp
+		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/InputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Export.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Listener.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Music.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundStream.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundSource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/AlResource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/OutputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Sound.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBufferRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.inl \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileReader.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileWriter.hpp \
+		../spacehero/spaceship.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\shot.o ..\spacehero\shot.cpp
 
 debug/spaceship.o: ../spacehero/spaceship.cpp ../spacehero/spaceship.h \
@@ -516,7 +570,24 @@ debug/spaceship.o: ../spacehero/spaceship.cpp ../spacehero/spaceship.h \
 		C:/SFML-2.5.1/include/SFML/Graphics/Glsl.inl \
 		C:/SFML-2.5.1/include/SFML/Graphics/Sprite.hpp \
 		C:/SFML-2.5.1/include/SFML/Graphics/Text.hpp \
-		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp
+		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/InputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Export.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Listener.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Music.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundStream.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundSource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/AlResource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/OutputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Sound.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBufferRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.inl \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileReader.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileWriter.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\spaceship.o ..\spacehero\spaceship.cpp
 
 debug/ufo.o: ../spacehero/ufo.cpp ../spacehero/ufo.h \
@@ -594,7 +665,24 @@ debug/ufo.o: ../spacehero/ufo.cpp ../spacehero/ufo.h \
 		C:/SFML-2.5.1/include/SFML/Graphics/Glsl.inl \
 		C:/SFML-2.5.1/include/SFML/Graphics/Sprite.hpp \
 		C:/SFML-2.5.1/include/SFML/Graphics/Text.hpp \
-		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp
+		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/InputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Export.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Listener.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Music.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundStream.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundSource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/AlResource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/OutputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Sound.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBufferRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.inl \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileReader.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileWriter.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\ufo.o ..\spacehero\ufo.cpp
 
 ####### Install

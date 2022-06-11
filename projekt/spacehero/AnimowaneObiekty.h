@@ -20,6 +20,12 @@ public:
         predkosc_x_ = predkosc_x;
         predkosc_y_ = predkosc_y;
     }
+
+    //Metody obslugujace zycia
+    virtual void zmniejsz_zycie(int odejmij_zycie)=0;
+    virtual int pobierz_liczbe_zyc()=0;
+
+
 protected:
     float predkosc_x_;
     float predkosc_y_;

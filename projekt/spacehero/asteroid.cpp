@@ -38,6 +38,8 @@ Asteroid::Asteroid(const sf::Texture &texture, int rozmiar_x, int rozmiar_y)
           }
 
 
+
+   zycia = 3;
 }
 
 void Asteroid::poruszaj(const sf::Time &elapsed,const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y)
@@ -54,3 +56,20 @@ void Asteroid::poruszaj(const sf::Time &elapsed,const sf::IntRect &windowBounds,
   }
   move(predkosc_x_ * elapsed.asSeconds(), predkosc_y_ *elapsed.asSeconds());
 }
+
+void Asteroid::zmniejsz_zycie(int odejmij_zycie)
+{
+    zycia -= odejmij_zycie;
+}
+
+bool Asteroid::czy_zyje() const
+{
+
+}
+
+int Asteroid::pobierz_liczbe_zyc()
+{
+    return zycia;
+}
+
+

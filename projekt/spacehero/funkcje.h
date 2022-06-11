@@ -8,6 +8,8 @@
 #include <vector>
 #include <memory>
 #include <utility>
+#include <fstream>
+
 
 //Sekcja bibliotek SFML
 #include <SFML/Graphics.hpp>
@@ -88,7 +90,7 @@ void dodaj_pociski(std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, cons
 //Funkcja dodajaca przeciwnikow na drugim poziomie
 void dodaj_przeciwnikow_2(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeciwnicy, const sf::Texture &textureUfo, const sf::Texture &textureAsteroid, int rozmiar_x, int rozmiar_y)
 {
-    for (int i=0; i<2; i++)
+    for (int i=0; i<15; i++)
     {
         auto ufo = std::make_unique<Ufo>(textureUfo, rozmiar_x, rozmiar_y);
         while(kolizja_przeciwnikow(przeciwnicy, ufo.get()))
@@ -98,7 +100,7 @@ void dodaj_przeciwnikow_2(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeci
         przeciwnicy.emplace_back(std::move(ufo));
     }
 
-    for(int i=0; i<2; i++)
+    for(int i=0; i<7; i++)
     {
         auto asteroid = std::make_unique<Asteroid>(textureAsteroid, rozmiar_x, rozmiar_y);
         while(kolizja_przeciwnikow(przeciwnicy, asteroid.get()))
@@ -112,7 +114,7 @@ void dodaj_przeciwnikow_2(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeci
 
 
 //Funkcja odpowiedzialna za zderzenia z pociskiem
-void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, std::vector<std::unique_ptr<AnimowaneObiekty>> &obiekty, int rozmiar_x, int rozmiar_y, sf::Texture &textureUfo, sf::Texture &textureAsteroid, sf::Texture &textureShot)
+void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, std::vector<std::unique_ptr<AnimowaneObiekty>> &obiekty, int rozmiar_x, int rozmiar_y, sf::Texture &textureUfo, sf::Texture &textureAsteroid, sf::Texture &textureShot, sf::Music &dzwiek)
 {
 
     for(auto itr1 = pociski.begin(); itr1 != pociski.end(); itr1++)
@@ -134,8 +136,13 @@ void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>>
               statek.dodaj_punkty(10);
               itr2 = obiekty.erase(itr2);
               itr1 = pociski.erase(itr1);
+              dzwiek.play();
               pociski.emplace_back(std::make_unique<shot>(textureShot, statek));
               std::cout << "Zniszczono ufo, +10 PKT!" <<std::endl;
+              }
+              else
+              {
+                  dzwiek.stop();
               }
               break;
               }
@@ -155,8 +162,14 @@ void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>>
                       statek.dodaj_punkty(20);
                       itr2 = obiekty.erase(itr2);
                       itr1 = pociski.erase(itr1);
+                      dzwiek.play();
+
                       pociski.emplace_back(std::make_unique<shot>(textureShot, statek));
                       std::cout << "Zniszczono asteroide, +20 PKT!" <<std::endl;
+                  }
+                  else
+                  {
+                      dzwiek.stop();
                   }
 
                   break;
@@ -167,6 +180,7 @@ void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>>
     }
 }
 
+//Funkcja odpowiedzialna za strzelanie do bossa
 void strzelanie_do_bosa(Spaceship &statek, boss &boss, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, int rozmiar_x, int rozmiar_y, sf::Texture &textureShot, sf::Texture &textureBoss)
 {
     for(auto itr1 = pociski.begin(); itr1 != pociski.end(); itr1++)
@@ -210,23 +224,44 @@ void zderzenia_z_obiektami(Spaceship &statek, std::vector<std::unique_ptr<Animow
     }
 }
 
-void dodaj_pociski_boss(std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski_boss, const sf::Texture &textureShot, boss &boss)
+//Funkcja odpowiedzialna za kolizje statku z bossem
+void zderzenia_z_bossem(boss &boss, Spaceship &statek,int rozmiar_x, int rozmiar_y)
 {
-   for(int i=0; i<1; i++)
-   {
-       pociski_boss.emplace_back(std::make_unique<shot>(textureShot, boss));
-   }
+    if(boss.getGlobalBounds().intersects(statek.getGlobalBounds()))
+    {
+        statek.zmniejsz_zycie(1);
+        statek.pozycja_startowa(rozmiar_x, rozmiar_y);
+        boss.dodaj_zycie(1);
+        boss.setPosition(rozmiar_x/2, rozmiar_y/2);
+        std::cout << "STRATA 1 ZYCIA! BOSS ZYSKAL DODATKOWE ZYCIE!" << std::endl;
+    }
+
 }
 
-void zderzenia_bossa(boss &boss, Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski,int rozmiar_x, int rozmiar_y, const sf::Texture &textureShot)
+//Funkcja odpowiedzialna za wywolanie fali przeciwnikow gdy boss straci 5 zyc
+void fala_1(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeciwnicy, const sf::Texture &textureUfo, int rozmiar_x, int rozmiar_y)
 {
-  for(auto itr1 = pociski.begin(); itr1 != pociski.end(); itr1++)
-  {
-      if((*itr1)->getGlobalBounds().intersects(statek.getGlobalBounds()))
-      {
-          itr1 = pociski.erase(itr1);
-          statek.zmniejsz_zycie(1);
-          pociski.emplace_back(std::make_unique<shot>(textureShot, boss));
-      }
-  }
+    for(int i=0; i<5; i++)
+    {
+        auto ufo = std::make_unique<Ufo>(textureUfo, rozmiar_x, rozmiar_y);
+        while(kolizja_przeciwnikow(przeciwnicy, ufo.get()))
+        {
+            ufo = std::make_unique<Ufo>(textureUfo, rozmiar_x, rozmiar_y);
+        }
+        przeciwnicy.emplace_back(std::move(ufo));
+    }
+}
+
+//Funkcja odpowiedzialna za wywolanie fali przeciwnikow gdy boss straci 10 zyc
+void fala_2(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeciwnicy, const sf::Texture &textureAsteroida, int rozmiar_x, int rozmiar_y)
+{
+    for(int i=0; i<10; i++)
+    {
+        auto asteroid = std::make_unique<Asteroid>(textureAsteroida, rozmiar_x, rozmiar_y);
+        while(kolizja_przeciwnikow(przeciwnicy, asteroid.get()))
+        {
+            asteroid = std::make_unique<Asteroid>(textureAsteroida, rozmiar_x, rozmiar_y);
+        }
+        przeciwnicy.emplace_back(std::move(asteroid));
+    }
 }

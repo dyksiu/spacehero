@@ -1,5 +1,5 @@
 #include "boss.h"
-
+#include <iostream>
 std::pair<int, int> boss::losowa_pozycja(int rozmiar_x, int rozmiar_y, int bez_dolu)
 {
     int x = 0;
@@ -20,27 +20,14 @@ boss::boss(const sf::Texture &texture, int rozmiar_x, int rozmiar_y)
   setTexture(texture);
   setScale(0.5,0.5);
 
-//  auto[x,y] = losowa_pozycja(rozmiar_x-55, (rozmiar_y - rozmiar_y/2) - 100, 50);
-//  setPosition(x,y);
+  auto[x,y] = losowa_pozycja(rozmiar_x-55, (rozmiar_y - rozmiar_y/2) - 100, 50);
+  setPosition(x,y);
   setPosition(rozmiar_x/2, rozmiar_y/2);
-          predkosc_x_ = 100;
-          predkosc_y_ = 10;
-          //int obrot = 25;
+          predkosc_x_ = 300;
+          predkosc_y_ = 300;
+          int obrot = 25;
 
-          //Losowanie predkosci
-//          float predkosc = ((float)(rand()%2000)/5.0) +5;
-//          int losowanie = rand()%2;
-
-//          if(losowanie == 0)
-//          {
-//            predkosc_x_ = predkosc;
-//          }
-//          else if(losowanie == 1)
-//          {
-//            predkosc_x_ = predkosc;
-//          }
-
-  zycia = 5;
+  zycia = 20;
 }
 
 void boss::ustaw_granice(const sf::IntRect &bounds)
@@ -52,29 +39,36 @@ void boss::ustaw_granice(const sf::IntRect &bounds)
 
 void boss::poruszaj(const sf::Time &elapsed, const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y)
 {
-    sf::FloatRect rectangle_bounds = getGlobalBounds();
 
-     int obrot = 25;
-    if(rectangle_bounds.left + rectangle_bounds.width - 25>= windowBounds.width)
-    {
-        predkosc_x_ = -std::abs(predkosc_x_);
-    }
-    else if(rectangle_bounds.left + 25 <= 0)
-    {
-        predkosc_x_ = std::abs(predkosc_x_);
-    }
-    if(rectangle_bounds.top <= bounds_.top)
-    {
-        predkosc_y_ = std::abs(predkosc_y_);
-    }
-    else if(rectangle_bounds.top + rectangle_bounds.height >= bounds_.top - 25 + bounds_.height)
-    {
-        predkosc_y_ = -std::abs(predkosc_y_);
-    }
-    move(predkosc_x_ * elapsed.asSeconds(), predkosc_y_ * elapsed.asSeconds());
-    //rotate(obrot*elapsed.asSeconds());
 }
 
+ void boss::ruch(const sf::Time &elapsed)
+{
+      odbicia();
+      move(elapsed.asSeconds()*predkosc_x_,elapsed.asSeconds()*predkosc_y_);
+
+}
+
+void boss::odbicia()
+{
+sf::FloatRect rectangle_bounds=this->getGlobalBounds();
+      //Dół
+      if((rectangle_bounds.top+rectangle_bounds.height)>=(720)){
+          predkosc_y_=-std::abs(predkosc_y_);
+      }
+      //Góra
+      if((rectangle_bounds.top)<=0){
+          predkosc_y_=std::abs(predkosc_y_);
+      }
+      //Prawo
+      if((rectangle_bounds.left+rectangle_bounds.width)>=(1080)){
+          predkosc_x_=-std::abs(predkosc_x_);
+      }
+      //Lewo
+      if((rectangle_bounds.left)<=0){
+          predkosc_x_=std::abs(predkosc_x_);
+      }
+}
 
 void boss::zmniejsz_zycie(int odejmij_zycie)
 {
@@ -84,6 +78,11 @@ void boss::zmniejsz_zycie(int odejmij_zycie)
 int boss::pobierz_liczbe_zyc()
 {
  return zycia;
+}
+
+void boss::dodaj_zycie(int dodaj_zycie)
+{
+    zycia += dodaj_zycie;
 }
 
 bool boss::czy_zyje() const

@@ -13,7 +13,6 @@ public:
     //Sekcja metod
     virtual void poruszaj(const sf::Time &elapsed,const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y)=0;
 
-
     //Metoda do ustawiania predkosci
     void ustaw_predkosc(int predkosc_x, int predkosc_y)
     {

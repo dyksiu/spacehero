@@ -13,9 +13,13 @@ public:
     void poruszaj(const sf::Time &elapsed, const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y);
     void ustaw_granice(const sf::IntRect &bounds);
 
+    void ruch(const sf::Time &elapsed);
+    void odbicia();
+
 
     //Metody obslugujace zycia
     void zmniejsz_zycie(int odejmij_zycie);
+    void dodaj_zycie(int dodaj_zycie);
     int pobierz_liczbe_zyc();
     bool czy_zyje() const;
 

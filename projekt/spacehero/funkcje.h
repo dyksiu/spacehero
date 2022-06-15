@@ -24,6 +24,7 @@
 #include "asteroid.h"
 #include "shot.h"
 #include "boss.h"
+#include "boost.h"
 
 
 ////////////////////////////////////////////
@@ -87,6 +88,14 @@ void dodaj_pociski(std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, cons
    }
 }
 
+void dodaj_boosty_1(std::vector<std::unique_ptr<boost>> &boosty, const sf::Texture &textureBoost, int rozmiar_x, int rozmiar_y)
+{
+    for(int i = 0; i<3; i++)
+    {
+        boosty.emplace_back(std::make_unique<boost>(textureBoost, rozmiar_x, rozmiar_y));
+    }
+}
+
 //Funkcja dodajaca przeciwnikow na drugim poziomie
 void dodaj_przeciwnikow_2(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeciwnicy, const sf::Texture &textureUfo, const sf::Texture &textureAsteroid, int rozmiar_x, int rozmiar_y)
 {
@@ -134,6 +143,7 @@ void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>>
               if((*itr2)->pobierz_liczbe_zyc() <= 0)
               {
               statek.dodaj_punkty(10);
+
               itr2 = obiekty.erase(itr2);
               itr1 = pociski.erase(itr1);
               dzwiek.play();
@@ -180,6 +190,7 @@ void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>>
     }
 }
 
+
 //Funkcja odpowiedzialna za strzelanie do bossa
 void strzelanie_do_bosa(Spaceship &statek, boss &boss, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, int rozmiar_x, int rozmiar_y, sf::Texture &textureShot, sf::Texture &textureBoss)
 {
@@ -224,6 +235,41 @@ void zderzenia_z_obiektami(Spaceship &statek, std::vector<std::unique_ptr<Animow
     }
 }
 
+//void zbieranie_boostow(std::vector<std::unique_ptr<boost>> &boosty, Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, int rozmiar_x, int rozmiar_y,
+//                       const sf::IntRect &windowBounds, sf::Texture &textureShot, sf::Texture &textureStatek, sf::Texture &textureBoost)
+//{
+//    for(auto itr = boosty.begin(); itr != boosty.end(); itr++)
+//    {
+//        for(auto itr2 = pociski.begin(); itr2 != pociski.end(); itr2++)
+//        {
+//           shot *pocisk = dynamic_cast<shot *>(itr2->get());
+//           if(pocisk != nullptr)
+//           {
+//               if(statek.getGlobalBounds().intersects((*itr)->getGlobalBounds()))
+//               {
+//                   pocisk->setScale(1.0,1.0);
+//                   itr = boosty.erase(itr);
+//               }
+//           }
+//           else
+//           {
+//               itr2++;
+//           }
+//        }
+//    }
+//}
+
+void zbieranie_boostow(std::vector<std::unique_ptr<boost>> &boosty, Spaceship  &statek, int rozmiar_x, int rozmiar_y)
+{
+    for(auto itr = boosty.begin(); itr != boosty.end(); itr++)
+    {
+        if((*itr)->getGlobalBounds().intersects(statek.getGlobalBounds()))
+        {
+            itr = boosty.erase(itr);
+        }
+    }
+}
+
 //Funkcja odpowiedzialna za kolizje statku z bossem
 void zderzenia_z_bossem(boss &boss, Spaceship &statek,int rozmiar_x, int rozmiar_y)
 {
@@ -241,7 +287,7 @@ void zderzenia_z_bossem(boss &boss, Spaceship &statek,int rozmiar_x, int rozmiar
 //Funkcja odpowiedzialna za wywolanie fali przeciwnikow gdy boss straci 5 zyc
 void fala_1(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeciwnicy, const sf::Texture &textureUfo, int rozmiar_x, int rozmiar_y)
 {
-    for(int i=0; i<5; i++)
+    for(int i=0; i<15; i++)
     {
         auto ufo = std::make_unique<Ufo>(textureUfo, rozmiar_x, rozmiar_y);
         while(kolizja_przeciwnikow(przeciwnicy, ufo.get()))

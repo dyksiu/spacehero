@@ -22,12 +22,15 @@
 #include "przycisk.h"
 #include "shot.h"
 #include "boss.h"
+#include "boost.h"
 #include "funkcje.h"
 
 using namespace std;
 
 //CO JESZCZE DODAĆ:
-
+//parametry z pliku
+//boss ciagle lata
+//boosty
 
 void wygrana()
 {
@@ -263,6 +266,17 @@ void poziom_2()
     zycie_wskaznik.setPosition(rozmiar_x/2 + 500 , rozmiar_y/2 - rozmiar_y/2);
     zycie.setPosition(rozmiar_x/2 + 320, rozmiar_y/2 - rozmiar_y/2);
 
+
+    //Tekst dla pauzy
+    sf::Text pauza_;
+    pauza_.setFont(font);
+    pauza_.setCharacterSize(30);
+    pauza_.setFillColor(sf::Color::White);
+    pauza_.setStyle(sf::Text::Bold);
+    pauza_.setString("PAUZA! Nacisnij spacje");
+
+    pauza_.setPosition((rozmiar_x/2 - rozmiar_x/2) + 400, rozmiar_y/2);
+
 //////////////////////////////////////////////////////////////////////////////////////
       // run the program as long as the window is open
     sf::Clock clock;
@@ -333,7 +347,7 @@ void poziom_2()
                  el->poruszaj(elapsed,windowBounds, rozmiar_x, rozmiar_y);
               }
 
-              zderzenia(statek, pociski, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot, zderzenie);
+              //zderzenia(statek, pociski, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot, zderzenie);
 
               zderzenia_z_obiektami(statek, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
 
@@ -436,13 +450,415 @@ void poziom_2()
           }
 
 
+          if(pauza)
+          {
+              window.draw(pauza_);
+          }
+
+
           // end the current frame
           window.display();
       }
 }
 
+void poziom_2_2()
+{
+    srand(time(NULL));
+    //Tekstury
+    sf::Texture textureStatek = loadTexture("./../spacehero/spaceship.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
+    sf::Texture textureUfo = loadTexture("./../spacehero/denufo.png");
+    sf::Texture textureAsteroida = loadTexture("./../spacehero/asteroid.png");
+    sf::Texture textureShot = loadTexture("./../spacehero/shot.png");
+    sf::Texture textureBoss = loadTexture("./../spacehero/krolestwo.png");
+    sf::Texture textureShot2 = loadTexture("./../spacehero/shot2.png");
+    sf::Texture textureStatek2 = loadTexture("./../spacehero/spaceship2.png");
 
-void ekran_wygranej()
+    sf::Music dzwiek;
+    if(!dzwiek.openFromFile("./../spacehero/shot.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    //Rozmiar okna gry
+    int rozmiar_x = 1080;
+    int rozmiar_y = 720;
+
+
+    //Utworzenie okna gry
+    sf::RenderWindow window(sf::VideoMode(rozmiar_x, rozmiar_y), "SpaceHero");
+
+    //Granice okna gry
+    sf::IntRect windowBounds(0, 0, window.getSize().x, window.getSize().y);
+
+
+
+    //Ustawienie tekstury tla na cale okno
+    textureTlo.setRepeated(true);
+
+    sf::Sprite spritetlo;
+    spritetlo.setTexture(textureTlo);
+    spritetlo.setScale(1.0,1.0);
+    spritetlo.setTextureRect(windowBounds);
+
+
+    //Utworzenie obiektu klasy spaceship
+    Spaceship statek(textureStatek, rozmiar_x, rozmiar_y);
+    Spaceship statek2(textureStatek2, rozmiar_x, rozmiar_y);
+    boss boss(textureBoss, rozmiar_x, rozmiar_y);
+
+
+    //Pole ktorego nie moga przekroczyc przeciwnicy
+    sf::RectangleShape hide_collision(sf::Vector2f(10000, 100));
+    hide_collision.setPosition(window.getSize().x/30, statek.getPosition().y + 125);
+    hide_collision.setFillColor(sf::Color(100,50, 250));
+
+    //Wspolny kontener na przeciwnikow
+    std::vector<std::unique_ptr<AnimowaneObiekty>> przeciwnicy;
+
+    //Kontener pociskow
+    std::vector<std::unique_ptr<AnimowaneObiekty>> pociski;
+
+    //Kontener pociskow gracza 2
+    std::vector<std::unique_ptr<AnimowaneObiekty>> pociski_2;
+
+    //Dodanie przeciwnikow do kontenera
+    dodaj_przeciwnikow_2(przeciwnicy, textureUfo, textureAsteroida, rozmiar_x, rozmiar_y);
+
+    dodaj_pociski(pociski, textureShot, statek);
+    dodaj_pociski(pociski_2, textureShot2, statek2);
+
+    //Muzyka
+    sf::Music muzyka;
+    if(!muzyka.openFromFile("./../spacehero/intro.wav"))
+    {
+        std::cerr <<"Nie udalo sie wczytac muzyki!" << std::endl;
+    }
+
+    muzyka.setVolume(10.f);
+    muzyka.play();
+
+    sf::Music zderzenie;
+    if(!zderzenie.openFromFile("./../spacehero/zderzenie.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music dzwiek2;
+    if(!dzwiek2.openFromFile("./../spacehero/shot2.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    //Fonty od punktow
+    sf::Font font;
+    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    {
+        std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
+    }
+
+    sf::Text wyniki;
+    wyniki.setFont(font);
+    wyniki.setCharacterSize(24);
+    wyniki.setFillColor(sf::Color::Red);
+    wyniki.setStyle(sf::Text::Bold);
+
+    sf::Text punkty;
+    punkty.setFont(font);
+    punkty.setString("Twoje punkty: ");
+    punkty.setCharacterSize(24);
+    punkty.setFillColor(sf::Color::Red);
+    punkty.setStyle(sf::Text::Bold);
+
+    wyniki.setPosition(rozmiar_x/2  + 491, rozmiar_y/2 - rozmiar_y/2);
+    punkty.setPosition(rozmiar_x/2 + 290 , rozmiar_y/2 - rozmiar_y/2);
+
+
+    //Fonty od zycia
+    sf::Text zycie_wskaznik;
+    zycie_wskaznik.setFont(font);
+    zycie_wskaznik.setCharacterSize(24);
+    zycie_wskaznik.setFillColor(sf::Color::Red);
+    zycie_wskaznik.setStyle(sf::Text::Bold);
+
+    sf::Text zycie;
+    zycie.setFont(font);
+    zycie.setCharacterSize(24);
+    zycie.setFillColor(sf::Color::Red);
+    zycie.setStyle(sf::Text::Bold);
+    zycie.setString("Twoje zycia: ");
+
+    zycie_wskaznik.setPosition(rozmiar_x/2 + 480 , rozmiar_y/2 - rozmiar_y/2 + 30);
+    zycie.setPosition(rozmiar_x/2 + 290, rozmiar_y/2 - rozmiar_y/2 + 30);
+
+    //Gracz po lewej
+        sf::Text wyniki2;
+        wyniki2.setFont(font);
+        wyniki2.setCharacterSize(24);
+        wyniki2.setFillColor(sf::Color::Red);
+        wyniki2.setStyle(sf::Text::Bold);
+
+        sf::Text punkty2;
+        punkty2.setFont(font);
+        punkty2.setString("Twoje punkty: ");
+        punkty2.setCharacterSize(24);
+        punkty2.setFillColor(sf::Color::Red);
+        punkty2.setStyle(sf::Text::Bold);
+
+        wyniki2.setPosition((rozmiar_x/2 - rozmiar_x/2) + 200, rozmiar_y/2 - rozmiar_y/2);
+        punkty2.setPosition(rozmiar_x/2 - rozmiar_x/2 , rozmiar_y/2 - rozmiar_y/2);
+
+        //Fonty od zycia
+        sf::Text zycie_wskaznik2;
+        zycie_wskaznik2.setFont(font);
+        zycie_wskaznik2.setCharacterSize(24);
+        zycie_wskaznik2.setFillColor(sf::Color::Red);
+        zycie_wskaznik2.setStyle(sf::Text::Bold);
+
+        sf::Text zycie2;
+        zycie2.setFont(font);
+        zycie2.setCharacterSize(24);
+        zycie2.setFillColor(sf::Color::Red);
+        zycie2.setStyle(sf::Text::Bold);
+        zycie2.setString("Twoje zycia: ");
+
+        zycie_wskaznik2.setPosition((rozmiar_x/2 - rozmiar_x/2) + 200, rozmiar_y/2 - rozmiar_y/2 + 30);
+        zycie2.setPosition(rozmiar_x/2 - rozmiar_x/2 , rozmiar_y/2 - rozmiar_y/2 + 30);
+
+
+
+    //Tekst dla pauzy
+    sf::Text pauza_;
+    pauza_.setFont(font);
+    pauza_.setCharacterSize(30);
+    pauza_.setFillColor(sf::Color::White);
+    pauza_.setStyle(sf::Text::Bold);
+    pauza_.setString("PAUZA! Nacisnij spacje");
+
+    pauza_.setPosition((rozmiar_x/2 - rozmiar_x/2) + 400, rozmiar_y/2);
+
+//////////////////////////////////////////////////////////////////////////////////////
+      // run the program as long as the window is open
+    sf::Clock clock;
+    sf::Clock shot_clock;
+
+    bool pauza = false;
+    bool fala1 = false;
+    bool fala2 = false;
+    window.setFramerateLimit(60);
+      while (window.isOpen()) {
+          // check all the window's events that were triggered since the last iteration of the loop
+          sf::Event event;
+          sf::Time elapsed = clock.restart();
+
+
+          while (window.pollEvent(event)) {
+              // "close requested" event: we close the window
+              if (event.type == sf::Event::Closed)
+                  window.close();
+              //Sterowanie statkiem za pomoca klawiszy
+
+              if(event.type == sf::Event::KeyPressed)
+              {
+
+                  for(auto itr=pociski.begin(); itr != pociski.end(); itr++)
+                  {
+                      shot *pocisk = dynamic_cast<shot *>(itr->get());
+                              if(pocisk != nullptr){
+                                  pocisk->strzal(event, statek, dzwiek);
+
+                              }
+                  }
+                  for(auto itr=pociski_2.begin(); itr != pociski_2.end(); itr++)
+                  {
+                      shot *pocisk_2 = dynamic_cast<shot *>(itr->get());
+                      if(pocisk_2 != nullptr){
+                          pocisk_2->strzal_2(event, statek2, dzwiek2);
+                      }
+                  }
+
+              }
+
+              //PAUZA PO WCISNIECIU KLAWISZA P
+              if(event.type == sf::Event::KeyReleased)
+              {
+                  if(event.key.code == sf::Keyboard::P)
+                  {
+                      pauza =! pauza;
+                  }
+              }
+
+          }
+          if(!pauza)
+          {
+              //SEKCJA OD PORUSZANIA
+              //STATEK 1
+              if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+              {
+               statek.ruch_po_x(elapsed, window,-1);
+              }
+              else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+              {
+              statek.ruch_po_x(elapsed, window, 1);
+              }
+              //STATEK 2
+              if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+              {
+                  statek2.ruch_po_x(elapsed,window,-1);
+              }
+              else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+              {
+                  statek2.ruch_po_x(elapsed,window,1);
+              }
+
+
+              for(auto &poc : pociski)
+              {
+              poc->poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+              }
+
+              for(auto &poc2 : pociski_2)
+              {
+                  poc2->poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+              }
+
+
+              for(auto &el : przeciwnicy)
+              {
+                 el->poruszaj(elapsed,windowBounds, rozmiar_x, rozmiar_y);
+              }
+
+             // zderzenia(statek, pociski, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot, zderzenie);
+             // zderzenia(statek2, pociski_2, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot2, zderzenie);
+
+              zderzenia_z_obiektami(statek, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
+              zderzenia_z_obiektami(statek2, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
+
+            //Wyswietlenie punktow
+            wyniki.setString(std::to_string(statek.pobierz_liczbe_punktow()));
+            wyniki2.setString(std::to_string(statek2.pobierz_liczbe_punktow()));
+
+            //Wyswietlenie zycia
+            zycie_wskaznik.setString(std::to_string(statek.pobierz_liczbe_zyc()));
+            zycie_wskaznik2.setString(std::to_string(statek2.pobierz_liczbe_zyc()));
+            if(!statek.czy_zyje() || !statek2.czy_zyje())
+            {
+                window.close();
+                std::cout << "PRZEGRANA!" << std::endl;
+            }
+          }
+          else
+          {
+              clock.restart();
+          }
+
+          // clear the window with black color
+          window.clear(sf::Color::Black);
+
+          //RYSOWANIE
+
+          window.draw(spritetlo);
+          window.draw(statek);
+          window.draw(statek2);
+          window.draw(wyniki);
+          window.draw(punkty);
+          window.draw(wyniki2);
+          window.draw(punkty2);
+          window.draw(zycie_wskaznik);
+          window.draw(zycie);
+          window.draw(zycie_wskaznik2);
+          window.draw(zycie2);
+
+          for(auto itr = przeciwnicy.begin(); itr != przeciwnicy.end(); itr++)
+          {
+              Ufo *ufo = dynamic_cast<Ufo *>(itr->get());
+              if(ufo != nullptr)
+              {
+              sf::RectangleShape hp(sf::Vector2f(ufo->pobierz_liczbe_zyc()*10,10));
+              hp.setPosition(ufo->getPosition().x + 10, ufo->getPosition().y - 10);
+              hp.setFillColor(sf::Color(255,0,0));
+              window.draw(hp);
+              }
+              Asteroid *asteroid = dynamic_cast<Asteroid *>(itr->get());
+              if(asteroid != nullptr)
+              {
+                  sf::RectangleShape hp(sf::Vector2f(asteroid->pobierz_liczbe_zyc()*10,10));
+                  hp.setPosition(asteroid->getPosition().x + 30, asteroid->getPosition().y);
+                  hp.setFillColor(sf::Color(255,153,25));
+                  window.draw(hp);
+              }
+
+          }
+
+          //Sekcja od bossa
+          if(przeciwnicy.empty())
+          {
+            boss.ruch(elapsed);
+            strzelanie_do_bosa(statek,boss,pociski,rozmiar_x,rozmiar_y,textureShot, textureBoss);
+            strzelanie_do_bosa(statek2, boss, pociski_2, rozmiar_x, rozmiar_y, textureShot2, textureBoss);
+
+            window.draw(boss);
+
+            zderzenia_z_bossem(boss, statek,rozmiar_x, rozmiar_y);
+            zderzenia_z_bossem(boss, statek2, rozmiar_x, rozmiar_y);
+
+            //Sekcja od HP bossa
+            sf::RectangleShape hp(sf::Vector2f(boss.pobierz_liczbe_zyc()*25,10));
+            hp.setPosition(rozmiar_x/2 - 250, rozmiar_y/2 - rozmiar_y/2 + 10);
+            hp.setFillColor(sf::Color(255,0,0));
+            window.draw(hp);
+
+            //Fale
+            if((boss.pobierz_liczbe_zyc() <= 15) && (fala1 == false))
+            {
+                fala_1(przeciwnicy, textureUfo, rozmiar_x, rozmiar_y);
+                statek.dodaj_zycie(1);
+                fala1 = true;
+            }
+            if((boss.pobierz_liczbe_zyc() <= 10) && (fala2 == false))
+            {
+                fala_2(przeciwnicy, textureAsteroida, rozmiar_x, rozmiar_y);
+                statek.dodaj_zycie(1);
+                fala2 = true;
+            }
+
+            //Warunek na wygraną
+            if(boss.pobierz_liczbe_zyc() == 0)
+            {
+              muzyka.stop();
+              wygrana();
+              window.close();
+            }
+           }
+
+          for(auto &p : przeciwnicy)
+          {
+              window.draw(*p);
+          }
+
+          for(auto &p : pociski)
+          {
+              window.draw(*p);
+          }
+
+          for(auto &p2 : pociski_2)
+          {
+              window.draw(*p2);
+          }
+
+
+          if(pauza)
+          {
+              window.draw(pauza_);
+          }
+
+
+          // end the current frame
+          window.display();
+      }
+}
+
+void ekran_wygranej_1()
 {
     sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
     sf::Texture textureDalej = loadTexture("./../spacehero/kolejny.png");
@@ -529,7 +945,94 @@ void ekran_wygranej()
     }
 }
 
-void gra()
+void ekran_wygranej_2()
+{
+    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
+    sf::Texture textureDalej = loadTexture("./../spacehero/kolejny.png");
+
+    //Rozmiar okna
+    int rozmiar_x =  500;
+    int rozmiar_y =  500;
+
+    //Okno
+    sf::RenderWindow window(sf::VideoMode(rozmiar_x, rozmiar_y), "SpaceHero");
+
+    sf::IntRect windowBounds(0, 0, window.getSize().x, window.getSize().y);
+
+    textureTlo.setRepeated(true);
+
+    sf::Sprite spritetlo;
+    spritetlo.setTexture(textureTlo);
+    spritetlo.setScale(1.0, 1.0);
+    spritetlo.setTextureRect(windowBounds);
+
+    //Fonty
+    sf::Font font;
+    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    {
+        std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
+    }
+
+    sf::Text text;
+
+    //Stworzenie fontu
+    text.setFont(font);
+    text.setString("WYGRANA!");
+    text.setCharacterSize(50);
+    text.setFillColor(sf::Color::Red);
+    text.setStyle(sf::Text::Bold);
+
+
+    text.setPosition(rozmiar_x/2 - 150, rozmiar_y/2 - rozmiar_y/2);
+
+    //Przyciski
+    przycisk przyciskKolejny(textureDalej, rozmiar_x, rozmiar_y);
+    przyciskKolejny.setPosition(rozmiar_x/2 - 75, rozmiar_y/2 - 100);
+
+
+    while (window.isOpen()) {
+        // check all the window's events that were triggered since the last iteration of the loop
+        sf::Event event;
+
+        while (window.pollEvent(event)) {
+            // "close requested" event: we close the window
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+             //Wcisniecie przyciskow
+            if(event.type == sf::Event::MouseButtonPressed){
+                sf::Vector2f pozycja_myszki = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                if(event.mouseButton.button == sf::Mouse::Left){
+                    if(przyciskKolejny.czy_wcisniety(pozycja_myszki))
+                    {
+                        std::cout << "Wcisnieto KOLEJNY POZIOM" << std::endl;
+                        window.close();
+                        poziom_2_2();
+                    }
+                }
+            }
+
+            }
+
+
+
+
+        // clear the window with black color
+        window.clear(sf::Color::Black);
+
+        // draw everything here...
+        window.draw(spritetlo);
+        window.draw(text);
+        window.draw(przyciskKolejny);
+
+
+
+        // end the current frame
+        window.display();
+    }
+}
+
+void gra_1()
 {
     srand(time(NULL));
     //Tekstury
@@ -538,6 +1041,7 @@ void gra()
     sf::Texture textureUfo = loadTexture("./../spacehero/ufo.png");
     sf::Texture textureAsteroida = loadTexture("./../spacehero/asteroid.png");
     sf::Texture textureShot = loadTexture("./../spacehero/shot.png");
+    sf::Texture textureBoost = loadTexture("./../spacehero/boost.png");
 
     //Rozmiar okna gry
     int rozmiar_x = 1080;
@@ -584,6 +1088,11 @@ void gra()
     //Utworzenie obiektu klasy spaceship
     Spaceship statek(textureStatek, rozmiar_x, rozmiar_y);
 
+//    boost boost(textureBoost, rozmiar_x, rozmiar_y);
+
+
+   // std::vector<std::unique_ptr<boost>> boosty;
+
     //Pole ktorego nie moga przekroczyc przeciwnicy
     sf::RectangleShape hide_collision(sf::Vector2f(10000, 100));
     hide_collision.setPosition(window.getSize().x/30, statek.getPosition().y + 125);
@@ -603,6 +1112,11 @@ void gra()
     dodaj_przeciwnikow_1(przeciwnicy, textureUfo, textureAsteroida, rozmiar_x, rozmiar_y);
 
     dodaj_pociski(pociski, textureShot, statek);
+
+
+    std::vector<std::unique_ptr<boost>> boosty;
+
+    //dodaj_boosty_1(boosty, textureBoost, rozmiar_x, rozmiar_y);
 
     //Fonty od punktow
     sf::Font font;
@@ -645,6 +1159,17 @@ void gra()
     zycie_wskaznik.setPosition(rozmiar_x/2 + 500 , rozmiar_y/2 - rozmiar_y/2);
     zycie.setPosition(rozmiar_x/2 + 320, rozmiar_y/2 - rozmiar_y/2);
 
+    //Tekst dla pauzy
+    sf::Text pauza_;
+    pauza_.setFont(font);
+    pauza_.setCharacterSize(30);
+    pauza_.setFillColor(sf::Color::White);
+    pauza_.setStyle(sf::Text::Bold);
+    pauza_.setString("PAUZA! Nacisnij spacje");
+
+    pauza_.setPosition((rozmiar_x/2 - rozmiar_x/2) + 400, rozmiar_y/2);
+
+
     sf::RectangleShape hp;
 //////////////////////////////////////////////////////////////////////////////////////
       // run the program as long as the window is open
@@ -653,6 +1178,8 @@ void gra()
     bool pauza = false;
     bool fala_1 = false;
     bool fala_2 = false;
+    bool boosty_1 = false;
+    bool boost_rozmiar = false;
     window.setFramerateLimit(60);
       while (window.isOpen()) {
           // check all the window's events that were triggered since the last iteration of the loop
@@ -687,6 +1214,7 @@ void gra()
                   if(event.key.code == sf::Keyboard::P)
                   {
                       pauza =! pauza;
+                      std::cout << "PAUZA" << std::endl;
                   }
               }
 
@@ -715,13 +1243,18 @@ void gra()
                   el->poruszaj(elapsed,windowBounds, rozmiar_x, rozmiar_y);
               }
 
+              for(auto &b : boosty)
+              {
+                  b ->poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+              }
+
+
               zderzenia(statek, pociski, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot, zderzenie);
 
               zderzenia_z_obiektami(statek, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
 
             //Wyswietlenie punktow
             wyniki.setString(std::to_string(statek.pobierz_liczbe_punktow()));
-
 
             //Warunek na wygrana
             if((przeciwnicy.empty()) && (fala_1 == false))
@@ -740,7 +1273,7 @@ void gra()
             {
                 muzyka.stop();
                 window.close();
-                ekran_wygranej();
+                ekran_wygranej_1();
 
                 std::cout << "NASTEPNY POZIOM!" << std::endl;
             }
@@ -804,6 +1337,447 @@ void gra()
               window.draw(*p);
           }
 
+          //Boosty pierwsze
+          if((statek.pobierz_liczbe_punktow() == 10) && (boosty_1 == false))
+          {
+
+              dodaj_boosty_1(boosty, textureBoost, rozmiar_x, rozmiar_y);
+//              zbieranie_boostow(boosty, statek, pociski, rozmiar_x, rozmiar_y,
+//                                windowBounds, textureShot, textureStatek, textureBoost);
+
+              boosty_1 = true;
+
+          }
+          //zbieranie_boostow(boosty, statek, rozmiar_x, rozmiar_y);
+
+          for(auto itr = boosty.begin(); itr != boosty.end(); itr++)
+          {
+              if((*itr)->getGlobalBounds().intersects(statek.getGlobalBounds()) && boost_rozmiar == false)
+              {
+                  itr = boosty.erase(itr);
+                  statek.setScale(0.1,0.1);
+                  boost_rozmiar = true;
+
+
+              }
+          }
+
+
+          for(auto itr = boosty.begin(); itr!= boosty.end();)
+          {
+              if((*itr)->getGlobalBounds().intersects(hide_collision.getGlobalBounds()))
+              {
+              itr = boosty.erase(itr);
+              }
+              else
+              {
+                  itr++;
+              }
+          }
+
+
+          for(auto &b : boosty)
+          {
+              window.draw(*b);
+          }
+          //Wyswietlenie napisu pauzy
+          if(pauza)
+          {
+              window.draw(pauza_);
+          }
+
+          // end the current frame
+          window.display();
+      }
+}
+
+void gra_2()
+{
+    srand(time(NULL));
+    //Tekstury
+    sf::Texture textureStatek = loadTexture("./../spacehero/spaceship.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
+    sf::Texture textureUfo = loadTexture("./../spacehero/ufo.png");
+    sf::Texture textureAsteroida = loadTexture("./../spacehero/asteroid.png");
+    sf::Texture textureShot = loadTexture("./../spacehero/shot.png");
+    sf::Texture textureStatek2 = loadTexture("./../spacehero/spaceship2.png");
+    sf::Texture textureShot2 = loadTexture("./../spacehero/shot2.png");
+
+    //Rozmiar okna gry
+    int rozmiar_x = 1080;
+    int rozmiar_y = 720;
+
+
+    sf::Music dzwiek;
+    if(!dzwiek.openFromFile("./../spacehero/shot.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music dzwiek2;
+    if(!dzwiek2.openFromFile("./../spacehero/shot2.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music muzyka;
+    if(!muzyka.openFromFile("./../spacehero/poziom1.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+    muzyka.setVolume(10.f);
+    muzyka.play();
+
+    sf::Music zderzenie;
+    if(!zderzenie.openFromFile("./../spacehero/zderzenie.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+
+    //Utworzenie okna gry
+    sf::RenderWindow window(sf::VideoMode(rozmiar_x, rozmiar_y), "SpaceHero");
+
+    //Granice okna gry
+    sf::IntRect windowBounds(0, 0, window.getSize().x, window.getSize().y);
+
+
+
+    //Ustawienie tekstury tla na cale okno
+    textureTlo.setRepeated(true);
+
+    sf::Sprite spritetlo;
+    spritetlo.setTexture(textureTlo);
+    spritetlo.setScale(1.0,1.0);
+    spritetlo.setTextureRect(windowBounds);
+
+    //Utworzenie obiektu klasy spaceship
+    Spaceship statek(textureStatek, rozmiar_x, rozmiar_y);
+    Spaceship statek2(textureStatek2, rozmiar_x/4, rozmiar_y);
+
+
+    //Pole ktorego nie moga przekroczyc przeciwnicy
+    sf::RectangleShape hide_collision(sf::Vector2f(10000, 100));
+    hide_collision.setPosition(window.getSize().x/30, statek.getPosition().y + 125);
+    hide_collision.setFillColor(sf::Color(100,50, 250));
+
+    sf::RectangleShape hide_collision_2(sf::Vector2f(10000, 100));
+    hide_collision.setPosition(window.getSize().x/30, statek.getPosition().y + 125);
+    hide_collision.setFillColor(sf::Color(100,50, 250));
+
+    //Wspolny kontener na przeciwnikow
+    std::vector<std::unique_ptr<AnimowaneObiekty>> przeciwnicy;
+
+    //Kontener pociskow
+    std::vector<std::unique_ptr<AnimowaneObiekty>> pociski;
+
+    //Kontener pociskow gracza 2
+    std::vector<std::unique_ptr<AnimowaneObiekty>> pociski_2;
+
+    //Pociski bossa
+    std::vector<std::unique_ptr<AnimowaneObiekty>> pociski_boss;
+
+    //Dodanie przeciwnikow do kontenera
+    dodaj_przeciwnikow_1(przeciwnicy, textureUfo, textureAsteroida, rozmiar_x, rozmiar_y);
+
+    dodaj_pociski(pociski, textureShot, statek);
+    dodaj_pociski(pociski_2, textureShot2, statek2);
+
+    //Fonty od punktow
+    sf::Font font;
+    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    {
+        std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
+    }
+
+//Gracz po prawej
+    sf::Text wyniki;
+    wyniki.setFont(font);
+    wyniki.setCharacterSize(24);
+    wyniki.setFillColor(sf::Color::Red);
+    wyniki.setStyle(sf::Text::Bold);
+
+    sf::Text punkty;
+    punkty.setFont(font);
+    punkty.setString("Twoje punkty: ");
+    punkty.setCharacterSize(24);
+    punkty.setFillColor(sf::Color::Red);
+    punkty.setStyle(sf::Text::Bold);
+
+    wyniki.setPosition(rozmiar_x/2  + 491, rozmiar_y/2 - rozmiar_y/2);
+    punkty.setPosition(rozmiar_x/2 + 290 , rozmiar_y/2 - rozmiar_y/2);
+
+
+    //Fonty od zycia
+    sf::Text zycie_wskaznik;
+    zycie_wskaznik.setFont(font);
+    zycie_wskaznik.setCharacterSize(24);
+    zycie_wskaznik.setFillColor(sf::Color::Red);
+    zycie_wskaznik.setStyle(sf::Text::Bold);
+
+    sf::Text zycie;
+    zycie.setFont(font);
+    zycie.setCharacterSize(24);
+    zycie.setFillColor(sf::Color::Red);
+    zycie.setStyle(sf::Text::Bold);
+    zycie.setString("Twoje zycia: ");
+
+    zycie_wskaznik.setPosition(rozmiar_x/2 + 480 , rozmiar_y/2 - rozmiar_y/2 + 30);
+    zycie.setPosition(rozmiar_x/2 + 290, rozmiar_y/2 - rozmiar_y/2 + 30);
+
+
+//Gracz po lewej
+    sf::Text wyniki2;
+    wyniki2.setFont(font);
+    wyniki2.setCharacterSize(24);
+    wyniki2.setFillColor(sf::Color::Red);
+    wyniki2.setStyle(sf::Text::Bold);
+
+    sf::Text punkty2;
+    punkty2.setFont(font);
+    punkty2.setString("Twoje punkty: ");
+    punkty2.setCharacterSize(24);
+    punkty2.setFillColor(sf::Color::Red);
+    punkty2.setStyle(sf::Text::Bold);
+
+    wyniki2.setPosition((rozmiar_x/2 - rozmiar_x/2) + 200, rozmiar_y/2 - rozmiar_y/2);
+    punkty2.setPosition(rozmiar_x/2 - rozmiar_x/2 , rozmiar_y/2 - rozmiar_y/2);
+
+    //Fonty od zycia
+    sf::Text zycie_wskaznik2;
+    zycie_wskaznik2.setFont(font);
+    zycie_wskaznik2.setCharacterSize(24);
+    zycie_wskaznik2.setFillColor(sf::Color::Red);
+    zycie_wskaznik2.setStyle(sf::Text::Bold);
+
+    sf::Text zycie2;
+    zycie2.setFont(font);
+    zycie2.setCharacterSize(24);
+    zycie2.setFillColor(sf::Color::Red);
+    zycie2.setStyle(sf::Text::Bold);
+    zycie2.setString("Twoje zycia: ");
+
+    zycie_wskaznik2.setPosition((rozmiar_x/2 - rozmiar_x/2) + 200, rozmiar_y/2 - rozmiar_y/2 + 30);
+    zycie2.setPosition(rozmiar_x/2 - rozmiar_x/2 , rozmiar_y/2 - rozmiar_y/2 + 30);
+
+
+    //Tekst dla pauzy
+    sf::Text pauza_;
+    pauza_.setFont(font);
+    pauza_.setCharacterSize(30);
+    pauza_.setFillColor(sf::Color::White);
+    pauza_.setStyle(sf::Text::Bold);
+    pauza_.setString("PAUZA! Nacisnij spacje");
+
+    pauza_.setPosition((rozmiar_x/2 - rozmiar_x/2) + 400, rozmiar_y/2);
+
+    sf::RectangleShape hp;
+//////////////////////////////////////////////////////////////////////////////////////
+      // run the program as long as the window is open
+    sf::Clock clock;
+
+    bool pauza = false;
+    bool fala_1 = false;
+    bool fala_2 = false;
+    window.setFramerateLimit(60);
+      while (window.isOpen()) {
+          // check all the window's events that were triggered since the last iteration of the loop
+          sf::Event event;
+          sf::Time elapsed = clock.restart();
+
+
+          while (window.pollEvent(event)) {
+              // "close requested" event: we close the window
+              if (event.type == sf::Event::Closed)
+                  window.close();
+              //Sterowanie statkiem za pomoca klawiszy
+
+
+              {
+              if(event.type == sf::Event::KeyPressed)
+              {
+
+                  for(auto itr=pociski.begin(); itr != pociski.end(); itr++)
+                  {
+                      shot *pocisk = dynamic_cast<shot *>(itr->get());
+                              if(pocisk != nullptr){
+                                  pocisk->strzal(event, statek, dzwiek);
+                              }
+                  }
+                  for(auto itr=pociski_2.begin(); itr != pociski_2.end(); itr++)
+                  {
+                      shot *pocisk_2 = dynamic_cast<shot *>(itr->get());
+                      if(pocisk_2 != nullptr){
+                          pocisk_2->strzal_2(event, statek2, dzwiek2);
+                      }
+                  }
+
+
+
+              }
+}
+              //PAUZA PO WCISNIECIU KLAWISZA P
+              if(event.type == sf::Event::KeyReleased)
+              {
+                  if(event.key.code == sf::Keyboard::P)
+                  {
+                      pauza =! pauza;
+                      std::cout << "PAUZA" << std::endl;
+                  }
+              }
+
+          }
+          if(!pauza)
+          {
+              //SEKCJA OD PORUSZANIA
+              //STATEK 1
+              if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+              {
+               statek.ruch_po_x(elapsed, window,-1);
+              }
+              else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+              {
+              statek.ruch_po_x(elapsed, window, 1);
+              }
+              //STATEK 2
+              if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+              {
+                  statek2.ruch_po_x(elapsed,window,-1);
+              }
+              else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+              {
+                  statek2.ruch_po_x(elapsed,window,1);
+              }
+
+
+              for(auto &poc : pociski)
+              {
+              poc->poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+              }
+
+              for(auto &poc2 : pociski_2)
+              {
+                  poc2->poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+              }
+
+
+              for(auto &el : przeciwnicy)
+              {
+                  el->poruszaj(elapsed,windowBounds, rozmiar_x, rozmiar_y);
+              }
+
+              //zderzenia(statek, pociski, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot, zderzenie);
+              //zderzenia(statek2, pociski_2, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot2, zderzenie);
+
+              zderzenia_z_obiektami(statek, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
+              zderzenia_z_obiektami(statek2, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
+
+
+            //Wyswietlenie punktow
+            wyniki.setString(std::to_string(statek.pobierz_liczbe_punktow()));
+            wyniki2.setString(std::to_string(statek2.pobierz_liczbe_punktow()));
+
+            //Warunek na wygrana
+            if((przeciwnicy.empty()) && (fala_1 == false))
+            {
+                dodaj_przeciwnikow_1(przeciwnicy, textureUfo, textureAsteroida, rozmiar_x, rozmiar_y);
+                statek.dodaj_zycie(1);
+                fala_1 = true;
+            }
+            if((przeciwnicy.empty()) && (fala_2 == false))
+            {
+                dodaj_przeciwnikow_1(przeciwnicy, textureUfo, textureAsteroida, rozmiar_x, rozmiar_y);
+                statek.dodaj_zycie(1);
+                fala_2 = true;
+            }
+            if(przeciwnicy.empty())
+            {
+                muzyka.stop();
+                window.close();
+                ekran_wygranej_2();
+
+                std::cout << "NASTEPNY POZIOM!" << std::endl;
+            }
+
+
+            //Wyswietlenie zycia
+            zycie_wskaznik.setString(std::to_string(statek.pobierz_liczbe_zyc()));
+            zycie_wskaznik2.setString(std::to_string(statek2.pobierz_liczbe_zyc()));
+            if(!statek.czy_zyje() || !statek2.czy_zyje())
+            {
+                window.close();
+                std::cout << "PRZEGRANA!" << std::endl;
+            }
+
+          }
+          else
+          {
+              clock.restart();
+          }
+
+          // clear the window with black color
+          window.clear(sf::Color::Black);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+          //RYSOWANIE
+          window.draw(spritetlo);
+          window.draw(statek);
+          window.draw(statek2);
+          window.draw(wyniki);
+          window.draw(punkty);
+          window.draw(wyniki2);
+          window.draw(punkty2);
+          window.draw(zycie_wskaznik);
+          window.draw(zycie);
+          window.draw(zycie_wskaznik2);
+          window.draw(zycie2);
+
+
+
+          //Rysowanie HP przeciwnikow
+          for(auto itr = przeciwnicy.begin(); itr != przeciwnicy.end(); itr++)
+          {
+              Ufo *ufo = dynamic_cast<Ufo *>(itr->get());
+              if(ufo != nullptr)
+              {
+              sf::RectangleShape hp(sf::Vector2f(ufo->pobierz_liczbe_zyc()*10,10));
+              hp.setPosition(ufo->getPosition().x + 10, ufo->getPosition().y - 10);
+              hp.setFillColor(sf::Color(255,0,0));
+              window.draw(hp);
+              }
+              Asteroid *asteroid = dynamic_cast<Asteroid *>(itr->get());
+              if(asteroid != nullptr)
+              {
+                  sf::RectangleShape hp(sf::Vector2f(asteroid->pobierz_liczbe_zyc()*10,10));
+                  hp.setPosition(asteroid->getPosition().x + 30, asteroid->getPosition().y);
+                  hp.setFillColor(sf::Color(255,153,25));
+                  window.draw(hp);
+              }
+
+          }
+
+
+          for(auto &p : przeciwnicy)
+          {
+
+              window.draw(*p);
+          }
+
+          for(auto &p : pociski)
+          {
+              window.draw(*p);
+          }
+
+          for(auto &p2 : pociski_2)
+          {
+              window.draw(*p2);
+          }
+
+          //Wyswietlenie napisu pauzy
+          if(pauza)
+          {
+              window.draw(pauza_);
+          }
           // end the current frame
           window.display();
       }
@@ -1057,6 +2031,82 @@ void autor()
 
 }
 
+void tryb_gry()
+{
+    //Tekstury
+    sf::Texture textureTlo = loadTexture("./../spacehero/tlotytul.png");
+    sf::Texture textureJeden = loadTexture("./../spacehero/jednoosobowy.png");
+    sf::Texture textureDwa = loadTexture("./../spacehero/dwuosobowy.png");
+
+    //Rozmiar okna gry
+    int rozmiar_x = 1080;
+    int rozmiar_y = 720;
+
+    //Utworzenie okna gry
+    sf::RenderWindow window(sf::VideoMode(rozmiar_x, rozmiar_y), "SpaceHero");
+
+    //Granice okna gry
+    sf::IntRect windowBounds(0, 0, window.getSize().x, window.getSize().y);
+
+    //Ustawienie tekstury tla na cale okno
+    textureTlo.setRepeated(true);
+
+    sf::Sprite spritetlo;
+    spritetlo.setTexture(textureTlo);
+    spritetlo.setScale(1.0,1.0);
+    spritetlo.setTextureRect(windowBounds);
+
+    //Przyciski
+    przycisk przyciskJedno(textureJeden, rozmiar_x, rozmiar_y);
+    przycisk przyciskDwa(textureDwa, rozmiar_x, rozmiar_y + rozmiar_y/6 + 20);
+
+    sf::Clock clock;
+    window.setFramerateLimit(60);
+      while (window.isOpen()) {
+          // check all the window's events that were triggered since the last iteration of the loop
+          sf::Event event;
+          sf::Time elapsed = clock.restart();
+
+          while (window.pollEvent(event)) {
+              // "close requested" event: we close the window
+              if (event.type == sf::Event::Closed)
+                  window.close();
+
+              //Wcisniecie przyciskow
+              if (event.type == sf::Event::MouseButtonPressed){
+                  sf::Vector2f pozycja_myszki = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                  if(event.mouseButton.button == sf::Mouse::Left){
+                      if(przyciskJedno.czy_wcisniety(pozycja_myszki))
+                      {
+                          std::cout <<"WYBRANO TRYB JEDNOOSOBOWY" << std::endl;
+                          window.close();
+                          gra_1();
+                      }
+                      if(przyciskDwa.czy_wcisniety(pozycja_myszki))
+                      {
+                          std::cout <<"WYBRANO TRYB DWUOSOBOWY!" << std::endl;
+                          window.close();
+                          gra_2();
+                      }
+                  }
+
+}
+
+
+          // clear the window with black color
+          window.clear(sf::Color::Black);
+
+          // draw everything here...
+          window.draw(spritetlo);
+          window.draw(przyciskJedno);
+          window.draw(przyciskDwa);
+
+          // end the current frame
+          window.display();
+      }
+}
+}
+
 void okno_startowe()
 {
 
@@ -1067,8 +2117,6 @@ void okno_startowe()
     sf::Texture textureAutor = loadTexture("./../spacehero/autor.png");
     sf::Texture textureDzwiek = loadTexture("./../spacehero/dzwiek.png");
     sf::Texture textureWylacz = loadTexture("./../spacehero/wylacz.png");
-
-
 
     //Rozmiar okna gry
     int rozmiar_x = 1080;
@@ -1127,7 +2175,7 @@ void okno_startowe()
                           std::cout << "Wcisnieto GRAJ" << std::endl;
                          window.close();
                          muzyka_intro.stop();
-                          gra();
+                          tryb_gry();
                       }
                       if(przyciskOpis.czy_wcisniety(pozycja_myszki))
                       {
@@ -1164,6 +2212,8 @@ void okno_startowe()
           window.draw(przyciskAutor);
           window.draw(przyciskSoundOn);
           window.draw(przyciskSoundOff);
+
+
 
 
 

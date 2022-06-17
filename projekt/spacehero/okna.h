@@ -28,14 +28,13 @@
 using namespace std;
 
 //CO JESZCZE DODAĆ:
-//parametry z pliku
 //boss ciagle lata
-//boosty
+
 
 void wygrana()
 {
-  sf::Texture textureTlo = loadTexture("./../spacehero/tlotytul.png");
-  sf::Texture texturePoli = loadTexture("./../spacehero/krolestwo.png");
+  sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlotytul.png");
+  sf::Texture texturePoli = loadTexture("./../spacehero/graphics/krolestwo.png");
 
   //Rozmiar okna
   int rozmiar_x = 1080;
@@ -58,7 +57,7 @@ void wygrana()
 
   //Muzyka
   sf::Music wygrana;
-  if(!wygrana.openFromFile("./../spacehero/wygrana.wav"))
+  if(!wygrana.openFromFile("./../spacehero/music/wygrana.wav"))
   {
       std::cerr <<"Nie udalo sie wczytac muzyki!" << std::endl;
   }
@@ -80,7 +79,7 @@ void wygrana()
 
   //Fonty
   sf::Font font;
-  if(!font.loadFromFile("./../spacehero/arial.ttf"))
+  if(!font.loadFromFile("./../spacehero/graphics/arial.ttf"))
   {
       std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
   }
@@ -151,17 +150,17 @@ void poziom_2()
 {
     srand(time(NULL));
     //Tekstury
-    sf::Texture textureStatek = loadTexture("./../spacehero/spaceship.png");
-    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
-    sf::Texture textureUfo = loadTexture("./../spacehero/denufo.png");
-    sf::Texture textureAsteroida = loadTexture("./../spacehero/asteroid.png");
-    sf::Texture textureShot = loadTexture("./../spacehero/shot.png");
-    sf::Texture textureBoss = loadTexture("./../spacehero/krolestwo.png");
-    sf::Texture textureBoost = loadTexture("./../spacehero/boost.png");
-    sf::Texture textureBoost2 = loadTexture("./../spacehero/boost2.png");
+    sf::Texture textureStatek = loadTexture("./../spacehero/graphics/spaceship.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlo.png");
+    sf::Texture textureUfo = loadTexture("./../spacehero/graphics/denufo.png");
+    sf::Texture textureAsteroida = loadTexture("./../spacehero/graphics/asteroid.png");
+    sf::Texture textureShot = loadTexture("./../spacehero/graphics/shot.png");
+    sf::Texture textureBoss = loadTexture("./../spacehero/graphics/krolestwo.png");
+    sf::Texture textureBoost = loadTexture("./../spacehero/graphics/boost.png");
+    sf::Texture textureBoost2 = loadTexture("./../spacehero/graphics/boost2.png");
 
     sf::Music dzwiek;
-    if(!dzwiek.openFromFile("./../spacehero/shot.wav"))
+    if(!dzwiek.openFromFile("./../spacehero/music/shot.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
@@ -215,7 +214,7 @@ void poziom_2()
 
     //Muzyka
     sf::Music muzyka;
-    if(!muzyka.openFromFile("./../spacehero/intro.wav"))
+    if(!muzyka.openFromFile("./../spacehero/music/intro.wav"))
     {
         std::cerr <<"Nie udalo sie wczytac muzyki!" << std::endl;
     }
@@ -224,31 +223,31 @@ void poziom_2()
     muzyka.play();
 
     sf::Music zderzenie;
-    if(!zderzenie.openFromFile("./../spacehero/zderzenie.wav"))
+    if(!zderzenie.openFromFile("./../spacehero/music/zderzenie.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music dzwiek_boost;
-    if(!dzwiek_boost.openFromFile("./../spacehero/boost.wav"))
+    if(!dzwiek_boost.openFromFile("./../spacehero/music/boost.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music dzwiek_boost2;
-    if(!dzwiek_boost2.openFromFile("./../spacehero/boost.wav"))
+    if(!dzwiek_boost2.openFromFile("./../spacehero/music/boost.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music unboost;
-    if(!unboost.openFromFile("./../spacehero/unboost.wav"))
+    if(!unboost.openFromFile("./../spacehero/music/unboost.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music unboost2;
-    if(!unboost2.openFromFile("./../spacehero/unboost.wav"))
+    if(!unboost2.openFromFile("./../spacehero/music/unboost.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
@@ -256,7 +255,7 @@ void poziom_2()
 
     //Fonty od punktow
     sf::Font font;
-    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    if(!font.loadFromFile("./../spacehero/graphics/arial.ttf"))
     {
         std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
     }
@@ -302,7 +301,7 @@ void poziom_2()
     pauza_.setCharacterSize(30);
     pauza_.setFillColor(sf::Color::White);
     pauza_.setStyle(sf::Text::Bold);
-    pauza_.setString("PAUZA! Nacisnij spacje");
+    pauza_.setString("PAUZA! Nacisnij P");
 
     pauza_.setPosition((rozmiar_x/2 - rozmiar_x/2) + 400, rozmiar_y/2);
 
@@ -315,11 +314,8 @@ void poziom_2()
     bool fala1 = false;
     bool fala2 = false;
     bool boosty_1 = false;
-    bool boosty_2 = false;
     bool boost_rozmiar = false;
     bool boost_potwory = false;
-    bool boost_rozmiar_2 = false;
-    bool boost_boss = false;
     window.setFramerateLimit(60);
       while (window.isOpen()) {
           // check all the window's events that were triggered since the last iteration of the loop
@@ -382,20 +378,20 @@ void poziom_2()
                  el->poruszaj(elapsed,windowBounds, rozmiar_x, rozmiar_y);
               }
 
-              zderzenia(statek, pociski, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot, zderzenie);
+              zderzenia(statek, pociski, przeciwnicy, textureShot, zderzenie);
 
-              zderzenia_z_obiektami(statek, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
+              zderzenia_z_obiektami(statek, przeciwnicy, rozmiar_x, rozmiar_y, hide_collision);
 
              //Poruszanie boostow
               for(auto &b : boosty1)
               {
-                  b ->poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+                  b ->poruszaj(elapsed);
               }
 
 
               for(auto &b : boosty2)
               {
-                  b ->poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+                  b ->poruszaj(elapsed);
               }
 
 
@@ -452,7 +448,7 @@ void poziom_2()
           if(przeciwnicy.empty())
           {
             boss.ruch(elapsed);
-            strzelanie_do_bosa(statek,boss,pociski,rozmiar_x,rozmiar_y,textureShot, textureBoss);
+            strzelanie_do_bosa(statek,boss,pociski,textureShot);
             zderzenia_z_bossem(boss, statek,rozmiar_x, rozmiar_y);
 
             //Sekcja od HP bossa
@@ -549,8 +545,6 @@ void poziom_2()
               }
           }
 
-
-
           if(przeciwnicy.empty())
           {
            window.draw(boss);
@@ -591,17 +585,17 @@ void poziom_2_2()
 {
     srand(time(NULL));
     //Tekstury
-    sf::Texture textureStatek = loadTexture("./../spacehero/spaceship.png");
-    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
-    sf::Texture textureUfo = loadTexture("./../spacehero/denufo.png");
-    sf::Texture textureAsteroida = loadTexture("./../spacehero/asteroid.png");
-    sf::Texture textureShot = loadTexture("./../spacehero/shot.png");
-    sf::Texture textureBoss = loadTexture("./../spacehero/krolestwo.png");
-    sf::Texture textureShot2 = loadTexture("./../spacehero/shot2.png");
-    sf::Texture textureStatek2 = loadTexture("./../spacehero/spaceship2.png");
+    sf::Texture textureStatek = loadTexture("./../spacehero/graphics/spaceship.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlo.png");
+    sf::Texture textureUfo = loadTexture("./../spacehero/graphics/denufo.png");
+    sf::Texture textureAsteroida = loadTexture("./../spacehero/graphics/asteroid.png");
+    sf::Texture textureShot = loadTexture("./../spacehero/graphics/shot.png");
+    sf::Texture textureBoss = loadTexture("./../spacehero/graphics/krolestwo.png");
+    sf::Texture textureShot2 = loadTexture("./../spacehero/graphics/shot2.png");
+    sf::Texture textureStatek2 = loadTexture("./../spacehero/graphics/spaceship2.png");
 
     sf::Music dzwiek;
-    if(!dzwiek.openFromFile("./../spacehero/shot.wav"))
+    if(!dzwiek.openFromFile("./../spacehero/music/shot.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
@@ -656,7 +650,7 @@ void poziom_2_2()
 
     //Muzyka
     sf::Music muzyka;
-    if(!muzyka.openFromFile("./../spacehero/intro.wav"))
+    if(!muzyka.openFromFile("./../spacehero/music/intro.wav"))
     {
         std::cerr <<"Nie udalo sie wczytac muzyki!" << std::endl;
     }
@@ -665,20 +659,20 @@ void poziom_2_2()
     muzyka.play();
 
     sf::Music zderzenie;
-    if(!zderzenie.openFromFile("./../spacehero/zderzenie.wav"))
+    if(!zderzenie.openFromFile("./../spacehero/music/zderzenie.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music dzwiek2;
-    if(!dzwiek2.openFromFile("./../spacehero/shot2.wav"))
+    if(!dzwiek2.openFromFile("./../spacehero/music/shot2.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     //Fonty od punktow
     sf::Font font;
-    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    if(!font.loadFromFile("./../spacehero/graphics/arial.ttf"))
     {
         std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
     }
@@ -759,7 +753,7 @@ void poziom_2_2()
     pauza_.setCharacterSize(30);
     pauza_.setFillColor(sf::Color::White);
     pauza_.setStyle(sf::Text::Bold);
-    pauza_.setString("PAUZA! Nacisnij spacje");
+    pauza_.setString("PAUZA! Nacisnij P");
 
     pauza_.setPosition((rozmiar_x/2 - rozmiar_x/2) + 400, rozmiar_y/2);
 
@@ -854,11 +848,11 @@ void poziom_2_2()
                  el->poruszaj(elapsed,windowBounds, rozmiar_x, rozmiar_y);
               }
 
-             // zderzenia(statek, pociski, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot, zderzenie);
-             // zderzenia(statek2, pociski_2, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot2, zderzenie);
+             zderzenia(statek, pociski, przeciwnicy, textureShot, zderzenie);
+             zderzenia(statek2, pociski_2, przeciwnicy, textureShot2, zderzenie);
 
-              zderzenia_z_obiektami(statek, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
-              zderzenia_z_obiektami(statek2, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
+              zderzenia_z_obiektami(statek, przeciwnicy, rozmiar_x, rozmiar_y, hide_collision);
+              zderzenia_z_obiektami(statek2, przeciwnicy, rozmiar_x, rozmiar_y, hide_collision);
 
             //Wyswietlenie punktow
             wyniki.setString(std::to_string(statek.pobierz_liczbe_punktow()));
@@ -920,8 +914,8 @@ void poziom_2_2()
           if(przeciwnicy.empty())
           {
             boss.ruch(elapsed);
-            strzelanie_do_bosa(statek,boss,pociski,rozmiar_x,rozmiar_y,textureShot, textureBoss);
-            strzelanie_do_bosa(statek2, boss, pociski_2, rozmiar_x, rozmiar_y, textureShot2, textureBoss);
+            strzelanie_do_bosa(statek,boss,pociski,textureShot);
+            strzelanie_do_bosa(statek2, boss, pociski_2, textureShot2);
 
             window.draw(boss);
 
@@ -986,8 +980,8 @@ void poziom_2_2()
 
 void ekran_wygranej_1()
 {
-    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
-    sf::Texture textureDalej = loadTexture("./../spacehero/kolejny.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlo.png");
+    sf::Texture textureDalej = loadTexture("./../spacehero/graphics/kolejny.png");
 
     //Rozmiar okna
     int rozmiar_x =  500;
@@ -1007,7 +1001,7 @@ void ekran_wygranej_1()
 
     //Fonty
     sf::Font font;
-    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    if(!font.loadFromFile("./../spacehero/graphics/arial.ttf"))
     {
         std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
     }
@@ -1073,8 +1067,8 @@ void ekran_wygranej_1()
 
 void ekran_wygranej_2()
 {
-    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
-    sf::Texture textureDalej = loadTexture("./../spacehero/kolejny.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlo.png");
+    sf::Texture textureDalej = loadTexture("./../spacehero/graphics/kolejny.png");
 
     //Rozmiar okna
     int rozmiar_x =  500;
@@ -1094,7 +1088,7 @@ void ekran_wygranej_2()
 
     //Fonty
     sf::Font font;
-    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    if(!font.loadFromFile("./../spacehero/graphics/arial.ttf"))
     {
         std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
     }
@@ -1162,13 +1156,13 @@ void gra_1()
 {
     srand(time(NULL));
     //Tekstury
-    sf::Texture textureStatek = loadTexture("./../spacehero/spaceship.png");
-    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
-    sf::Texture textureUfo = loadTexture("./../spacehero/ufo.png");
-    sf::Texture textureAsteroida = loadTexture("./../spacehero/asteroid.png");
-    sf::Texture textureShot = loadTexture("./../spacehero/shot.png");
-    sf::Texture textureBoost = loadTexture("./../spacehero/boost.png");
-    sf::Texture textureBoost2 = loadTexture("./../spacehero/boost2.png");
+    sf::Texture textureStatek = loadTexture("./../spacehero/graphics/spaceship.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlo.png");
+    sf::Texture textureUfo = loadTexture("./../spacehero/graphics/ufo.png");
+    sf::Texture textureAsteroida = loadTexture("./../spacehero/graphics/asteroid.png");
+    sf::Texture textureShot = loadTexture("./../spacehero/graphics/shot.png");
+    sf::Texture textureBoost = loadTexture("./../spacehero/graphics/boost.png");
+    sf::Texture textureBoost2 = loadTexture("./../spacehero/graphics/boost2.png");
 
 
     //Rozmiar okna gry
@@ -1177,14 +1171,14 @@ void gra_1()
 
 
     sf::Music dzwiek;
-    if(!dzwiek.openFromFile("./../spacehero/shot.wav"))
+    if(!dzwiek.openFromFile("./../spacehero/music/shot.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
 
     sf::Music muzyka;
-    if(!muzyka.openFromFile("./../spacehero/poziom1.wav"))
+    if(!muzyka.openFromFile("./../spacehero/music/poziom1.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
@@ -1192,31 +1186,31 @@ void gra_1()
     muzyka.play();
 
     sf::Music zderzenie;
-    if(!zderzenie.openFromFile("./../spacehero/zderzenie.wav"))
+    if(!zderzenie.openFromFile("./../spacehero/music/zderzenie.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music dzwiek_boost;
-    if(!dzwiek_boost.openFromFile("./../spacehero/boost.wav"))
+    if(!dzwiek_boost.openFromFile("./../spacehero/music/boost.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music dzwiek_boost2;
-    if(!dzwiek_boost2.openFromFile("./../spacehero/boost.wav"))
+    if(!dzwiek_boost2.openFromFile("./../spacehero/music/boost.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music unboost;
-    if(!unboost.openFromFile("./../spacehero/unboost.wav"))
+    if(!unboost.openFromFile("./../spacehero/music/unboost.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music unboost2;
-    if(!unboost2.openFromFile("./../spacehero/unboost.wav"))
+    if(!unboost2.openFromFile("./../spacehero/music/unboost.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
@@ -1265,7 +1259,7 @@ void gra_1()
 
     //Fonty od punktow
     sf::Font font;
-    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    if(!font.loadFromFile("./../spacehero/graphics/arial.ttf"))
     {
         std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
     }
@@ -1395,18 +1389,18 @@ void gra_1()
 
               for(auto &b : boosty1)
               {
-                  b ->poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+                  b ->poruszaj(elapsed);
               }
 
 
               for(auto &b : boosty2)
               {
-                  b ->poruszaj(elapsed, windowBounds, rozmiar_x, rozmiar_y);
+                  b ->poruszaj(elapsed);
               }
 
-              zderzenia(statek, pociski, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot, zderzenie);
+              zderzenia(statek, pociski, przeciwnicy, textureShot, zderzenie);
 
-              zderzenia_z_obiektami(statek, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
+              zderzenia_z_obiektami(statek, przeciwnicy, rozmiar_x, rozmiar_y, hide_collision);
 
 
 
@@ -1607,7 +1601,7 @@ void gra_1()
           window.draw(punkty);
           window.draw(zycie_wskaznik);
           window.draw(zycie);
-          //window.draw(hide_collision);
+
 
           for(auto itr = przeciwnicy.begin(); itr != przeciwnicy.end(); itr++)
           {
@@ -1666,13 +1660,13 @@ void gra_2()
 {
     srand(time(NULL));
     //Tekstury
-    sf::Texture textureStatek = loadTexture("./../spacehero/spaceship.png");
-    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
-    sf::Texture textureUfo = loadTexture("./../spacehero/ufo.png");
-    sf::Texture textureAsteroida = loadTexture("./../spacehero/asteroid.png");
-    sf::Texture textureShot = loadTexture("./../spacehero/shot.png");
-    sf::Texture textureStatek2 = loadTexture("./../spacehero/spaceship2.png");
-    sf::Texture textureShot2 = loadTexture("./../spacehero/shot2.png");
+    sf::Texture textureStatek = loadTexture("./../spacehero/graphics/spaceship.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlo.png");
+    sf::Texture textureUfo = loadTexture("./../spacehero/graphics/ufo.png");
+    sf::Texture textureAsteroida = loadTexture("./../spacehero/graphics/asteroid.png");
+    sf::Texture textureShot = loadTexture("./../spacehero/graphics/shot.png");
+    sf::Texture textureStatek2 = loadTexture("./../spacehero/graphics/spaceship2.png");
+    sf::Texture textureShot2 = loadTexture("./../spacehero/graphics/shot2.png");
 
     //Rozmiar okna gry
     int rozmiar_x = 1080;
@@ -1680,19 +1674,19 @@ void gra_2()
 
 
     sf::Music dzwiek;
-    if(!dzwiek.openFromFile("./../spacehero/shot.wav"))
+    if(!dzwiek.openFromFile("./../spacehero/music/shot.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music dzwiek2;
-    if(!dzwiek2.openFromFile("./../spacehero/shot2.wav"))
+    if(!dzwiek2.openFromFile("./../spacehero/music/shot2.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
 
     sf::Music muzyka;
-    if(!muzyka.openFromFile("./../spacehero/poziom1.wav"))
+    if(!muzyka.openFromFile("./../spacehero/music/poziom1.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
@@ -1700,7 +1694,7 @@ void gra_2()
     muzyka.play();
 
     sf::Music zderzenie;
-    if(!zderzenie.openFromFile("./../spacehero/zderzenie.wav"))
+    if(!zderzenie.openFromFile("./../spacehero/music/zderzenie.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
@@ -1756,7 +1750,7 @@ void gra_2()
 
     //Fonty od punktow
     sf::Font font;
-    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    if(!font.loadFromFile("./../spacehero/graphics/arial.ttf"))
     {
         std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
     }
@@ -1838,7 +1832,7 @@ void gra_2()
     pauza_.setCharacterSize(30);
     pauza_.setFillColor(sf::Color::White);
     pauza_.setStyle(sf::Text::Bold);
-    pauza_.setString("PAUZA! Nacisnij spacje");
+    pauza_.setString("PAUZA! Nacisnij P");
 
     pauza_.setPosition((rozmiar_x/2 - rozmiar_x/2) + 400, rozmiar_y/2);
 
@@ -1937,11 +1931,11 @@ void gra_2()
                   el->poruszaj(elapsed,windowBounds, rozmiar_x, rozmiar_y);
               }
 
-              //zderzenia(statek, pociski, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot, zderzenie);
-              //zderzenia(statek2, pociski_2, przeciwnicy, rozmiar_x, rozmiar_y, textureUfo, textureAsteroida, textureShot2, zderzenie);
+              zderzenia(statek, pociski, przeciwnicy,  textureShot, zderzenie);
+              zderzenia(statek2, pociski_2, przeciwnicy, textureShot2, zderzenie);
 
-              zderzenia_z_obiektami(statek, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
-              zderzenia_z_obiektami(statek2, przeciwnicy, windowBounds, rozmiar_x, rozmiar_y, textureAsteroida, textureUfo, hide_collision);
+              zderzenia_z_obiektami(statek, przeciwnicy, rozmiar_x, rozmiar_y, hide_collision);
+              zderzenia_z_obiektami(statek2, przeciwnicy, rozmiar_x, rozmiar_y, hide_collision);
 
 
             //Wyswietlenie punktow
@@ -2057,12 +2051,12 @@ void gra_2()
 void opis()
 {
     //Tekstury
-    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
-    sf::Texture textureA = loadTexture("./../spacehero/a.png");
-    sf::Texture textureD = loadTexture("./../spacehero/d.png");
-    sf::Texture textureP = loadTexture("./../spacehero/p.png");
-    sf::Texture textureSpacja = loadTexture("./../spacehero/spacja.png");
-    sf::Texture textureLewy = loadTexture("./../spacehero/lewy.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlo.png");
+    sf::Texture textureA = loadTexture("./../spacehero/graphics/a.png");
+    sf::Texture textureD = loadTexture("./../spacehero/graphics/d.png");
+    sf::Texture textureP = loadTexture("./../spacehero/graphics/p.png");
+    sf::Texture textureSpacja = loadTexture("./../spacehero/graphics/spacja.png");
+    sf::Texture textureLewy = loadTexture("./../spacehero/graphics/lewy.png");
 
     //Rozmiar okna
     int rozmiar_x = 600;
@@ -2080,7 +2074,7 @@ void opis()
 
     //Fonty
     sf::Font font;
-    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    if(!font.loadFromFile("./../spacehero/graphics/arial.ttf"))
     {
         std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
     }
@@ -2207,7 +2201,7 @@ void opis()
 void autor()
 {
     //Tekstury
-    sf::Texture textureTlo = loadTexture("./../spacehero/tlo.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlo.png");
 
     //Rozmiar okna
     int rozmiar_x = 600;
@@ -2217,7 +2211,7 @@ void autor()
     sf::RenderWindow window(sf::VideoMode(rozmiar_x, rozmiar_y), "SpaceHero");
 
     //Gif
-    sf::Texture giff = loadTexture("./../spacehero/sweet.gif");
+    sf::Texture giff = loadTexture("./../spacehero/graphics/sweet.gif");
 
     sf::Sprite giff_s;
     giff_s.setTexture(giff);
@@ -2226,7 +2220,7 @@ void autor()
 
     //Fonty
     sf::Font font;
-    if(!font.loadFromFile("./../spacehero/arial.ttf"))
+    if(!font.loadFromFile("./../spacehero/graphics/arial.ttf"))
     {
         std::cerr << "Nie udalo sie wczytac fontu!" << std::endl;
     }
@@ -2281,9 +2275,6 @@ void autor()
 
             }
 
-
-
-
         // clear the window with black color
         window.clear(sf::Color::Black);
 
@@ -2305,9 +2296,9 @@ void autor()
 void tryb_gry()
 {
     //Tekstury
-    sf::Texture textureTlo = loadTexture("./../spacehero/tlotytul.png");
-    sf::Texture textureJeden = loadTexture("./../spacehero/jednoosobowy.png");
-    sf::Texture textureDwa = loadTexture("./../spacehero/dwuosobowy.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlotytul.png");
+    sf::Texture textureJeden = loadTexture("./../spacehero/graphics/jednoosobowy.png");
+    sf::Texture textureDwa = loadTexture("./../spacehero/graphics/dwuosobowy.png");
 
     //Rozmiar okna gry
     int rozmiar_x = 1080;
@@ -2336,7 +2327,6 @@ void tryb_gry()
       while (window.isOpen()) {
           // check all the window's events that were triggered since the last iteration of the loop
           sf::Event event;
-          sf::Time elapsed = clock.restart();
 
           while (window.pollEvent(event)) {
               // "close requested" event: we close the window
@@ -2382,12 +2372,12 @@ void okno_startowe()
 {
 
     //Tekstury
-    sf::Texture textureTlo = loadTexture("./../spacehero/tlotytul.png");
-    sf::Texture textureGraj = loadTexture("./../spacehero/graj.png");
-    sf::Texture textureOpis = loadTexture("./../spacehero/opis.png");
-    sf::Texture textureAutor = loadTexture("./../spacehero/autor.png");
-    sf::Texture textureDzwiek = loadTexture("./../spacehero/dzwiek.png");
-    sf::Texture textureWylacz = loadTexture("./../spacehero/wylacz.png");
+    sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlotytul.png");
+    sf::Texture textureGraj = loadTexture("./../spacehero/graphics/graj.png");
+    sf::Texture textureOpis = loadTexture("./../spacehero/graphics/opis.png");
+    sf::Texture textureAutor = loadTexture("./../spacehero/graphics/autor.png");
+    sf::Texture textureDzwiek = loadTexture("./../spacehero/graphics/dzwiek.png");
+    sf::Texture textureWylacz = loadTexture("./../spacehero/graphics/wylacz.png");
 
     //Rozmiar okna gry
     int rozmiar_x = 1080;
@@ -2417,7 +2407,7 @@ void okno_startowe()
 
     //Muzyka
     sf::Music muzyka_intro;
-    if(!muzyka_intro.openFromFile("./../spacehero/intro.wav"))
+    if(!muzyka_intro.openFromFile("./../spacehero/music/intro.wav"))
     {
         std::cerr <<"Nie udalo sie wczytac muzyki!" << std::endl;
     }
@@ -2430,7 +2420,6 @@ void okno_startowe()
       while (window.isOpen()) {
           // check all the window's events that were triggered since the last iteration of the loop
           sf::Event event;
-          sf::Time elapsed = clock.restart();
 
           while (window.pollEvent(event)) {
               // "close requested" event: we close the window
@@ -2483,10 +2472,6 @@ void okno_startowe()
           window.draw(przyciskAutor);
           window.draw(przyciskSoundOn);
           window.draw(przyciskSoundOff);
-
-
-
-
 
           // end the current frame
           window.display();

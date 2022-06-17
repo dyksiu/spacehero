@@ -1,5 +1,6 @@
 #include "przycisk.h"
 
+//Konstruktor przycisku
 przycisk::przycisk(const sf::Texture &texture, int rozmiar_x, int rozmiar_y)
 {
  setTexture(texture);
@@ -7,6 +8,7 @@ przycisk::przycisk(const sf::Texture &texture, int rozmiar_x, int rozmiar_y)
  setScale(1.0,1.0);
 }
 
+//Metoda sprawdzajaca czy przycisk jest wcisniety
 bool przycisk::czy_wcisniety(const sf::Vector2f &pozycja_myszki) const
 {
     sf::FloatRect rectangle_bounds = getGlobalBounds();

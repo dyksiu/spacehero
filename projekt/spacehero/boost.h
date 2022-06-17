@@ -9,11 +9,8 @@ class boost : public sf::Sprite
 public:
     boost(const sf::Texture &texture, int rozmiar_x, int rozmiar_y);
 
-
-
-
     //Sekcja metod
-    void poruszaj(const sf::Time &elapsed, const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y);
+    void poruszaj(const sf::Time &elapsed);
 
 private:
     int predkosc_x;

@@ -21,7 +21,6 @@ public:
     void zmniejsz_zycie(int odejmij_zycie);
     void dodaj_zycie(int dodaj_zycie);
     int pobierz_liczbe_zyc();
-    bool czy_zyje() const;
 
 private:
     int zycia;

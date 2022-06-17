@@ -1,5 +1,4 @@
 #pragma once
-
 //Sekcja bibliotek ogolnych
 #include <iostream>
 #include <string>
@@ -9,7 +8,6 @@
 #include <memory>
 #include <utility>
 #include <fstream>
-
 
 //Sekcja bibliotek SFML
 #include <SFML/Graphics.hpp>
@@ -25,7 +23,6 @@
 #include "shot.h"
 #include "boss.h"
 #include "boost.h"
-
 
 ////////////////////////////////////////////
 //Funkcja odpowiedzialna za wczytywanie tekstur
@@ -57,7 +54,18 @@ void dodaj_przeciwnikow_1(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeci
 {
     //Dodanie Ufo
     //Na 1 poziomie 15 ufo
-    for(int i=0; i<15; i++)
+    //Ustawienie parametrow z pliku (można zmienić samemu)
+      std::string z_pliku;
+      std::string z_pliku2;
+      std::ifstream Czytaj_Plik("./../spacehero/parameters/dodaj_przeciwnikow_1.txt");
+      if(Czytaj_Plik.fail())
+      {
+          return;
+      }
+      Czytaj_Plik >> z_pliku >> z_pliku2;
+      Czytaj_Plik.close();
+
+    for(int i=0; i<stoi(z_pliku); i++)
     {
         auto ufo = std::make_unique<Ufo>(textureUfo, rozmiar_x, rozmiar_y);
         while(kolizja_przeciwnikow(przeciwnicy, ufo.get()))
@@ -69,7 +77,7 @@ void dodaj_przeciwnikow_1(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeci
     //Dodanie Asteroid
     //Na 1 poziomie 5 asteroid
 
-    for(int i=0; i<5; i++)
+    for(int i=0; i<stoi(z_pliku2); i++)
     {
         auto asteroid = std::make_unique<Asteroid>(textureAsteroid, rozmiar_x, rozmiar_y);
         while(kolizja_przeciwnikow(przeciwnicy, asteroid.get()))
@@ -89,11 +97,21 @@ void dodaj_pociski(std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, cons
    }
 }
 
-
 //Funkcja dodajaca pierwsze boosty
 void dodaj_boosty_1(std::vector<std::unique_ptr<boost>> &boosty, const sf::Texture &textureBoost, int rozmiar_x, int rozmiar_y)
 {
-    for(int i = 0; i<3; i++)
+    //Ustawienie parametrow z pliku (można zmienić samemu)
+      std::string z_pliku;
+
+      std::ifstream Czytaj_Plik("./../spacehero/parameters/dodaj_boosty_1.txt");
+      if(Czytaj_Plik.fail())
+      {
+          return;
+      }
+      Czytaj_Plik >> z_pliku;
+      Czytaj_Plik.close();
+
+    for(int i = 0; i<stoi(z_pliku); i++)
     {
         boosty.emplace_back(std::make_unique<boost>(textureBoost, rozmiar_x, rozmiar_y));
     }
@@ -102,7 +120,18 @@ void dodaj_boosty_1(std::vector<std::unique_ptr<boost>> &boosty, const sf::Textu
 //Funkcja dodajaca drugie boosty
 void dodaj_boosty_2(std::vector<std::unique_ptr<boost>> &boosty, const sf::Texture &textureBoost2, int rozmiar_x, int rozmiar_y)
 {
-    for(int i = 0; i <5; i++)
+    //Ustawienie parametrow z pliku (można zmienić samemu)
+      std::string z_pliku;
+
+      std::ifstream Czytaj_Plik("./../spacehero/parameters/dodaj_boosty_2.txt");
+      if(Czytaj_Plik.fail())
+      {
+          return;
+      }
+      Czytaj_Plik >> z_pliku;
+      Czytaj_Plik.close();
+
+    for(int i = 0; i < stoi(z_pliku); i++)
     {
         boosty.emplace_back(std::make_unique<boost>(textureBoost2, rozmiar_x, rozmiar_y));
     }
@@ -111,7 +140,19 @@ void dodaj_boosty_2(std::vector<std::unique_ptr<boost>> &boosty, const sf::Textu
 //Funkcja dodajaca przeciwnikow na drugim poziomie
 void dodaj_przeciwnikow_2(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeciwnicy, const sf::Texture &textureUfo, const sf::Texture &textureAsteroid, int rozmiar_x, int rozmiar_y)
 {
-    for (int i=0; i<15; i++)
+    //Ustawienie parametrow z pliku (można zmienić samemu)
+      std::string z_pliku;
+      std::string z_pliku2;
+
+      std::ifstream Czytaj_Plik("./../spacehero/parameters/dodaj_boosty_1.txt");
+      if(Czytaj_Plik.fail())
+      {
+          return;
+      }
+      Czytaj_Plik >> z_pliku >> z_pliku2;
+      Czytaj_Plik.close();
+
+    for (int i=0; i<stoi(z_pliku); i++)
     {
         auto ufo = std::make_unique<Ufo>(textureUfo, rozmiar_x, rozmiar_y);
         while(kolizja_przeciwnikow(przeciwnicy, ufo.get()))
@@ -121,7 +162,7 @@ void dodaj_przeciwnikow_2(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeci
         przeciwnicy.emplace_back(std::move(ufo));
     }
 
-    for(int i=0; i<7; i++)
+    for(int i=0; i<stoi(z_pliku2); i++)
     {
         auto asteroid = std::make_unique<Asteroid>(textureAsteroid, rozmiar_x, rozmiar_y);
         while(kolizja_przeciwnikow(przeciwnicy, asteroid.get()))
@@ -133,9 +174,8 @@ void dodaj_przeciwnikow_2(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeci
 
 }
 
-
 //Funkcja odpowiedzialna za zderzenia z pociskiem
-void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, std::vector<std::unique_ptr<AnimowaneObiekty>> &obiekty, int rozmiar_x, int rozmiar_y, sf::Texture &textureUfo, sf::Texture &textureAsteroid, sf::Texture &textureShot, sf::Music &dzwiek)
+void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, std::vector<std::unique_ptr<AnimowaneObiekty>> &obiekty, sf::Texture &textureShot, sf::Music &dzwiek)
 {
 
     for(auto itr1 = pociski.begin(); itr1 != pociski.end(); itr1++)
@@ -202,9 +242,8 @@ void zderzenia(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>>
     }
 }
 
-
 //Funkcja odpowiedzialna za strzelanie do bossa
-void strzelanie_do_bosa(Spaceship &statek, boss &boss, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, int rozmiar_x, int rozmiar_y, sf::Texture &textureShot, sf::Texture &textureBoss)
+void strzelanie_do_bosa(Spaceship &statek, boss &boss, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, sf::Texture &textureShot)
 {
     for(auto itr1 = pociski.begin(); itr1 != pociski.end(); itr1++)
     {
@@ -218,7 +257,7 @@ void strzelanie_do_bosa(Spaceship &statek, boss &boss, std::vector<std::unique_p
 }
 
 //Funkcja odpowiedzialna za zderzenie obiektow ze statkiem
-void zderzenia_z_obiektami(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>> &obiekty, const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y, sf::Texture &textureAsteroid, sf::Texture &textureUfo, const sf::RectangleShape &hide_collision)
+void zderzenia_z_obiektami(Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>> &obiekty, int rozmiar_x, int rozmiar_y, const sf::RectangleShape &hide_collision)
 {
     for(auto itr = obiekty.begin(); itr != obiekty.end();)
     {
@@ -264,7 +303,18 @@ void zderzenia_z_bossem(boss &boss, Spaceship &statek,int rozmiar_x, int rozmiar
 //Funkcja odpowiedzialna za wywolanie fali przeciwnikow gdy boss straci 5 zyc
 void fala_1(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeciwnicy, const sf::Texture &textureUfo, int rozmiar_x, int rozmiar_y)
 {
-    for(int i=0; i<15; i++)
+    //Ustawienie parametrow z pliku (można zmienić samemu)
+      std::string z_pliku;
+
+      std::ifstream Czytaj_Plik("./../spacehero/parameters/fala_1.txt");
+      if(Czytaj_Plik.fail())
+      {
+          return;
+      }
+      Czytaj_Plik >> z_pliku;
+      Czytaj_Plik.close();
+
+    for(int i=0; i<stoi(z_pliku); i++)
     {
         auto ufo = std::make_unique<Ufo>(textureUfo, rozmiar_x, rozmiar_y);
         while(kolizja_przeciwnikow(przeciwnicy, ufo.get()))
@@ -278,7 +328,18 @@ void fala_1(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeciwnicy, const s
 //Funkcja odpowiedzialna za wywolanie fali przeciwnikow gdy boss straci 10 zyc
 void fala_2(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeciwnicy, const sf::Texture &textureAsteroida, int rozmiar_x, int rozmiar_y)
 {
-    for(int i=0; i<10; i++)
+    //Ustawienie parametrow z pliku (można zmienić samemu)
+      std::string z_pliku;
+
+      std::ifstream Czytaj_Plik("./../spacehero/parameters/fala_2.txt");
+      if(Czytaj_Plik.fail())
+      {
+          return;
+      }
+      Czytaj_Plik >> z_pliku;
+      Czytaj_Plik.close();
+
+    for(int i=0; i<stoi(z_pliku); i++)
     {
         auto asteroid = std::make_unique<Asteroid>(textureAsteroida, rozmiar_x, rozmiar_y);
         while(kolizja_przeciwnikow(przeciwnicy, asteroid.get()))

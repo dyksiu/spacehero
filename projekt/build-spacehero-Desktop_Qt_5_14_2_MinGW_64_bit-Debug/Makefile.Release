@@ -51,6 +51,7 @@ OBJECTS_DIR   = release
 ####### Files
 
 SOURCES       = ..\spacehero\asteroid.cpp \
+		..\spacehero\boost.cpp \
 		..\spacehero\boss.cpp \
 		..\spacehero\main.cpp \
 		..\spacehero\przycisk.cpp \
@@ -58,6 +59,7 @@ SOURCES       = ..\spacehero\asteroid.cpp \
 		..\spacehero\spaceship.cpp \
 		..\spacehero\ufo.cpp 
 OBJECTS       = release/asteroid.o \
+		release/boost.o \
 		release/boss.o \
 		release/main.o \
 		release/przycisk.o \
@@ -68,6 +70,7 @@ OBJECTS       = release/asteroid.o \
 DIST          =  AnimowaneObiekty.h \
 		StatyczneObiekty.h \
 		asteroid.h \
+		boost.h \
 		boss.h \
 		funkcje.h \
 		okna.h \
@@ -75,6 +78,7 @@ DIST          =  AnimowaneObiekty.h \
 		shot.h \
 		spaceship.h \
 		ufo.h ..\spacehero\asteroid.cpp \
+		..\spacehero\boost.cpp \
 		..\spacehero\boss.cpp \
 		..\spacehero\main.cpp \
 		..\spacehero\przycisk.cpp \
@@ -103,7 +107,7 @@ dist:
 	$(ZIP) spacehero.zip $(SOURCES) $(DIST) ..\spacehero\spacehero.pro D:\Qt\5.14.2\mingw73_64\mkspecs\features\spec_pre.prf D:\Qt\5.14.2\mingw73_64\mkspecs\qdevice.pri D:\Qt\5.14.2\mingw73_64\mkspecs\features\device_config.prf D:\Qt\5.14.2\mingw73_64\mkspecs\common\sanitize.conf D:\Qt\5.14.2\mingw73_64\mkspecs\common\gcc-base.conf D:\Qt\5.14.2\mingw73_64\mkspecs\common\g++-base.conf D:\Qt\5.14.2\mingw73_64\mkspecs\common\angle.conf D:\Qt\5.14.2\mingw73_64\mkspecs\features\win32\windows_vulkan_sdk.prf D:\Qt\5.14.2\mingw73_64\mkspecs\common\windows-vulkan.conf D:\Qt\5.14.2\mingw73_64\mkspecs\common\g++-win32.conf D:\Qt\5.14.2\mingw73_64\mkspecs\common\windows-desktop.conf D:\Qt\5.14.2\mingw73_64\mkspecs\qconfig.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3danimation.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3danimation_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dcore.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dcore_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dextras.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dextras_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dinput.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dinput_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dlogic.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dlogic_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquick.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquick_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquickanimation.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquickanimation_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquickextras.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquickextras_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquickinput.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquickinput_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquickrender.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquickrender_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquickscene2d.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3dquickscene2d_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3drender.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_3drender_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_accessibility_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_axbase.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_axbase_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_axcontainer.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_axcontainer_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_axserver.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_axserver_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_bluetooth.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_bluetooth_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_bodymovin_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_bootstrap_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_charts.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_charts_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_concurrent.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_concurrent_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_core.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_core_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_datavisualization.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_datavisualization_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_dbus.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_dbus_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_designer.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_designer_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_designercomponents_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_edid_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_egl_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_fb_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_fontdatabase_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_gamepad.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_gamepad_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_gui.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_gui_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_help.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_help_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_location.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_location_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_multimedia.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_multimedia_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_multimediawidgets.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_network.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_network_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_networkauth.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_networkauth_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_nfc.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_nfc_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_opengl.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_opengl_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_openglextensions.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_openglextensions_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_packetprotocol_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_platformcompositor_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_positioning.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_positioning_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_positioningquick.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_positioningquick_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_printsupport.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_printsupport_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_purchasing.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_purchasing_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qml.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qml_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qmldebug_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qmldevtools_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qmlmodels.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qmlmodels_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qmltest.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qmltest_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qmlworkerscript.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick3d.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick3d_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick3dassetimport.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick3drender.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick3drender_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick3druntimerender.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick3dutils.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick3dutils_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quick_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quickcontrols2.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quickparticles_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quickshapes_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quicktemplates2.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quickwidgets.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_quickwidgets_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_remoteobjects.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_remoteobjects_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_repparser.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_repparser_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_script.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_script_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_scripttools.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_scripttools_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_scxml.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_scxml_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_sensors.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_sensors_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_serialbus.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_serialbus_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_serialport.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_serialport_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_sql.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_sql_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_svg.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_svg_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_testlib.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_testlib_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_texttospeech.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_texttospeech_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_theme_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_uiplugin.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_uitools.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_uitools_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_virtualkeyboard.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_virtualkeyboard_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_vulkan_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_webchannel.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_webchannel_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_websockets.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_websockets_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_widgets.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_widgets_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_windowsuiautomation_support_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_winextras.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_winextras_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_xml.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_xml_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_xmlpatterns.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_xmlpatterns_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\modules\qt_lib_zlib_private.pri D:\Qt\5.14.2\mingw73_64\mkspecs\features\qt_functions.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\qt_config.prf D:\Qt\5.14.2\mingw73_64\mkspecs\win32-g++\qmake.conf D:\Qt\5.14.2\mingw73_64\mkspecs\features\spec_post.prf .qmake.stash D:\Qt\5.14.2\mingw73_64\mkspecs\features\exclusive_builds.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\toolchain.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\default_pre.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\win32\default_pre.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\resolve_config.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\exclusive_builds_post.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\default_post.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\build_pass.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\win32\console.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\qml_debug.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\precompile_header.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\warn_on.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\qmake_use.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\file_copies.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\testcase_targets.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\exceptions.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\yacc.prf D:\Qt\5.14.2\mingw73_64\mkspecs\features\lex.prf ..\spacehero\spacehero.pro      
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\asteroid.o release\boss.o release\main.o release\przycisk.o release\shot.o release\spaceship.o release\ufo.o
+	-$(DEL_FILE) release\asteroid.o release\boost.o release\boss.o release\main.o release\przycisk.o release\shot.o release\spaceship.o release\ufo.o
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
@@ -222,6 +226,100 @@ release/asteroid.o: ../spacehero/asteroid.cpp ../spacehero/asteroid.h \
 		C:/SFML-2.5.1/include/SFML/Audio/SoundFileReader.hpp \
 		C:/SFML-2.5.1/include/SFML/Audio/SoundFileWriter.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\asteroid.o ..\spacehero\asteroid.cpp
+
+release/boost.o: ../spacehero/boost.cpp ../spacehero/boost.h \
+		C:/SFML-2.5.1/include/SFML/Graphics.hpp \
+		C:/SFML-2.5.1/include/SFML/Window.hpp \
+		C:/SFML-2.5.1/include/SFML/System.hpp \
+		C:/SFML-2.5.1/include/SFML/Config.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Clock.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Export.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Time.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Err.hpp \
+		C:/SFML-2.5.1/include/SFML/System/FileInputStream.hpp \
+		C:/SFML-2.5.1/include/SFML/System/InputStream.hpp \
+		C:/SFML-2.5.1/include/SFML/System/NonCopyable.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Lock.hpp \
+		C:/SFML-2.5.1/include/SFML/System/MemoryInputStream.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Mutex.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Sleep.hpp \
+		C:/SFML-2.5.1/include/SFML/System/String.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Utf.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Utf.inl \
+		C:/SFML-2.5.1/include/SFML/System/String.inl \
+		C:/SFML-2.5.1/include/SFML/System/Thread.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Thread.inl \
+		C:/SFML-2.5.1/include/SFML/System/ThreadLocal.hpp \
+		C:/SFML-2.5.1/include/SFML/System/ThreadLocalPtr.hpp \
+		C:/SFML-2.5.1/include/SFML/System/ThreadLocalPtr.inl \
+		C:/SFML-2.5.1/include/SFML/System/Vector2.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Vector2.inl \
+		C:/SFML-2.5.1/include/SFML/System/Vector3.hpp \
+		C:/SFML-2.5.1/include/SFML/System/Vector3.inl \
+		C:/SFML-2.5.1/include/SFML/Window/Clipboard.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/Export.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/Context.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/GlResource.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/ContextSettings.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/Cursor.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/Event.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/Joystick.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/Keyboard.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/Mouse.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/Sensor.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/Touch.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/VideoMode.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/Window.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/WindowHandle.hpp \
+		C:/SFML-2.5.1/include/SFML/Window/WindowStyle.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/BlendMode.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Export.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/CircleShape.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Shape.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Drawable.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/RenderStates.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Transform.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Rect.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Rect.inl \
+		C:/SFML-2.5.1/include/SFML/Graphics/Transformable.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/VertexArray.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Vertex.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Color.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/PrimitiveType.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/ConvexShape.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Font.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Glyph.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Texture.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Image.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/RectangleShape.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/RenderTarget.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/View.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/RenderTexture.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/RenderWindow.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Shader.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Glsl.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Glsl.inl \
+		C:/SFML-2.5.1/include/SFML/Graphics/Sprite.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/Text.hpp \
+		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/InputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Export.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Listener.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Music.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundStream.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundSource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/AlResource.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/OutputSoundFile.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/Sound.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBuffer.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundBufferRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundRecorder.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.inl \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileReader.hpp \
+		C:/SFML-2.5.1/include/SFML/Audio/SoundFileWriter.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\boost.o ..\spacehero\boost.cpp
 
 release/boss.o: ../spacehero/boss.cpp ../spacehero/boss.h \
 		../spacehero/AnimowaneObiekty.h \
@@ -417,6 +515,7 @@ release/main.o: ../spacehero/main.cpp ../spacehero/okna.h \
 		../spacehero/przycisk.h \
 		../spacehero/StatyczneObiekty.h \
 		../spacehero/shot.h \
+		../spacehero/boss.h \
 		../spacehero/funkcje.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\main.o ..\spacehero\main.cpp
 
@@ -591,7 +690,8 @@ release/shot.o: ../spacehero/shot.cpp ../spacehero/shot.h \
 		C:/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.inl \
 		C:/SFML-2.5.1/include/SFML/Audio/SoundFileReader.hpp \
 		C:/SFML-2.5.1/include/SFML/Audio/SoundFileWriter.hpp \
-		../spacehero/spaceship.h
+		../spacehero/spaceship.h \
+		../spacehero/boss.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\shot.o ..\spacehero\shot.cpp
 
 release/spaceship.o: ../spacehero/spaceship.cpp ../spacehero/spaceship.h \

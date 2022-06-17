@@ -1,5 +1,7 @@
 #include "boss.h"
 #include <iostream>
+#include <fstream>
+//Losowa pozycja dla bossa
 std::pair<int, int> boss::losowa_pozycja(int rozmiar_x, int rozmiar_y, int bez_dolu)
 {
     int x = 0;
@@ -14,7 +16,7 @@ std::pair<int, int> boss::losowa_pozycja(int rozmiar_x, int rozmiar_y, int bez_d
 
 }
 
-
+//Konstruktor bossa
 boss::boss(const sf::Texture &texture, int rozmiar_x, int rozmiar_y)
 {
   setTexture(texture);
@@ -23,13 +25,27 @@ boss::boss(const sf::Texture &texture, int rozmiar_x, int rozmiar_y)
   auto[x,y] = losowa_pozycja(rozmiar_x-55, (rozmiar_y - rozmiar_y/2) - 100, 50);
   setPosition(x,y);
   setPosition(rozmiar_x/2, rozmiar_y/2);
-          predkosc_x_ = 300;
-          predkosc_y_ = 300;
-          int obrot = 25;
 
-  zycia = 20;
+  //Ustawienie parametrow z pliku (można zmienić samemu)
+  std::string z_pliku;
+  std::string z_pliku2;
+  std::string z_pliku3;
+
+  std::ifstream Czytaj_Plik("./../spacehero/parameters/boss.txt");
+  if(Czytaj_Plik.fail())
+    {
+      return;
+    }
+     Czytaj_Plik >> z_pliku >> z_pliku2 >> z_pliku3;
+     Czytaj_Plik.close();
+
+          zycia = stoi(z_pliku);
+          predkosc_x_ = stoi(z_pliku2);
+          predkosc_y_ = stoi(z_pliku3);
+
 }
 
+//Ustawienie granic odbijania dla bossa
 void boss::ustaw_granice(const sf::IntRect &bounds)
 {
     bounds_ = bounds;
@@ -37,18 +53,21 @@ void boss::ustaw_granice(const sf::IntRect &bounds)
     boss_shape_.setPosition(bounds_.top, bounds_.left);
 }
 
+//Metoda wirtualna
 void boss::poruszaj(const sf::Time &elapsed, const sf::IntRect &windowBounds, int rozmiar_x, int rozmiar_y)
 {
 
 }
 
- void boss::ruch(const sf::Time &elapsed)
+//Metoda odpowiadajaca za ruch bossa z wzglednieniem boundsow
+void boss::ruch(const sf::Time &elapsed)
 {
       odbicia();
       move(elapsed.asSeconds()*predkosc_x_,elapsed.asSeconds()*predkosc_y_);
 
 }
 
+//Boundsy bossa
 void boss::odbicia()
 {
 sf::FloatRect rectangle_bounds=this->getGlobalBounds();
@@ -70,6 +89,7 @@ sf::FloatRect rectangle_bounds=this->getGlobalBounds();
       }
 }
 
+//Metody od obsługi życia
 void boss::zmniejsz_zycie(int odejmij_zycie)
 {
   zycia -= odejmij_zycie;
@@ -85,7 +105,3 @@ void boss::dodaj_zycie(int dodaj_zycie)
     zycia += dodaj_zycie;
 }
 
-bool boss::czy_zyje() const
-{
-
-}

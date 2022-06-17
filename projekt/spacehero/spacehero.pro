@@ -14,6 +14,8 @@ CONFIG(debug, debug|release){
 
 SOURCES += \
         asteroid.cpp \
+        boost.cpp \
+        boss.cpp \
         main.cpp \
         przycisk.cpp \
         shot.cpp \
@@ -24,7 +26,10 @@ HEADERS += \
     AnimowaneObiekty.h \
     StatyczneObiekty.h \
     asteroid.h \
+    boost.h \
+    boss.h \
     funkcje.h \
+    okna.h \
     przycisk.h \
     shot.h \
     spaceship.h \

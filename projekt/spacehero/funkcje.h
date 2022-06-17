@@ -80,6 +80,7 @@ void dodaj_przeciwnikow_1(std::vector<std::unique_ptr<AnimowaneObiekty>> &przeci
     }
 }
 
+//Funkcja dodająca pociski
 void dodaj_pociski(std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, const sf::Texture &textureShot, Spaceship &statek)
 {
    for(int i=0; i<1; i++)
@@ -88,11 +89,22 @@ void dodaj_pociski(std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, cons
    }
 }
 
+
+//Funkcja dodajaca pierwsze boosty
 void dodaj_boosty_1(std::vector<std::unique_ptr<boost>> &boosty, const sf::Texture &textureBoost, int rozmiar_x, int rozmiar_y)
 {
     for(int i = 0; i<3; i++)
     {
         boosty.emplace_back(std::make_unique<boost>(textureBoost, rozmiar_x, rozmiar_y));
+    }
+}
+
+//Funkcja dodajaca drugie boosty
+void dodaj_boosty_2(std::vector<std::unique_ptr<boost>> &boosty, const sf::Texture &textureBoost2, int rozmiar_x, int rozmiar_y)
+{
+    for(int i = 0; i <5; i++)
+    {
+        boosty.emplace_back(std::make_unique<boost>(textureBoost2, rozmiar_x, rozmiar_y));
     }
 }
 
@@ -231,41 +243,6 @@ void zderzenia_z_obiektami(Spaceship &statek, std::vector<std::unique_ptr<Animow
         else
         {
             itr++;
-        }
-    }
-}
-
-//void zbieranie_boostow(std::vector<std::unique_ptr<boost>> &boosty, Spaceship &statek, std::vector<std::unique_ptr<AnimowaneObiekty>> &pociski, int rozmiar_x, int rozmiar_y,
-//                       const sf::IntRect &windowBounds, sf::Texture &textureShot, sf::Texture &textureStatek, sf::Texture &textureBoost)
-//{
-//    for(auto itr = boosty.begin(); itr != boosty.end(); itr++)
-//    {
-//        for(auto itr2 = pociski.begin(); itr2 != pociski.end(); itr2++)
-//        {
-//           shot *pocisk = dynamic_cast<shot *>(itr2->get());
-//           if(pocisk != nullptr)
-//           {
-//               if(statek.getGlobalBounds().intersects((*itr)->getGlobalBounds()))
-//               {
-//                   pocisk->setScale(1.0,1.0);
-//                   itr = boosty.erase(itr);
-//               }
-//           }
-//           else
-//           {
-//               itr2++;
-//           }
-//        }
-//    }
-//}
-
-void zbieranie_boostow(std::vector<std::unique_ptr<boost>> &boosty, Spaceship  &statek, int rozmiar_x, int rozmiar_y)
-{
-    for(auto itr = boosty.begin(); itr != boosty.end(); itr++)
-    {
-        if((*itr)->getGlobalBounds().intersects(statek.getGlobalBounds()))
-        {
-            itr = boosty.erase(itr);
         }
     }
 }

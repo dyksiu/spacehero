@@ -27,10 +27,6 @@
 
 using namespace std;
 
-//CO JESZCZE DODAĆ:
-//boss ciagle lata
-
-
 void wygrana()
 {
   sf::Texture textureTlo = loadTexture("./../spacehero/graphics/tlotytul.png");
@@ -452,7 +448,7 @@ void poziom_2()
             zderzenia_z_bossem(boss, statek,rozmiar_x, rozmiar_y);
 
             //Sekcja od HP bossa
-            sf::RectangleShape hp(sf::Vector2f(boss.pobierz_liczbe_zyc()*25,10));            
+            sf::RectangleShape hp(sf::Vector2f(boss.pobierz_liczbe_zyc()*25,10));
             hp.setPosition(rozmiar_x/2 - 250, rozmiar_y/2 - rozmiar_y/2 + 10);
             hp.setFillColor(sf::Color(255,0,0));
             window.draw(hp);
@@ -461,7 +457,7 @@ void poziom_2()
             if((boss.pobierz_liczbe_zyc() <= 15) && (fala1 == false))
             {
                 fala_1(przeciwnicy, textureUfo, rozmiar_x, rozmiar_y);
-                statek.dodaj_zycie(1);                
+                statek.dodaj_zycie(1);
                 fala1 = true;
             }
             if((boss.pobierz_liczbe_zyc() <= 10) && (fala2 == false))
@@ -593,6 +589,8 @@ void poziom_2_2()
     sf::Texture textureBoss = loadTexture("./../spacehero/graphics/krolestwo.png");
     sf::Texture textureShot2 = loadTexture("./../spacehero/graphics/shot2.png");
     sf::Texture textureStatek2 = loadTexture("./../spacehero/graphics/spaceship2.png");
+    sf::Texture textureBoost = loadTexture("./../spacehero/graphics/boost.png");
+    sf::Texture textureBoost2 = loadTexture("./../spacehero/graphics/boost2.png");
 
     sf::Music dzwiek;
     if(!dzwiek.openFromFile("./../spacehero/music/shot.wav"))
@@ -624,7 +622,7 @@ void poziom_2_2()
 
     //Utworzenie obiektu klasy spaceship
     Spaceship statek(textureStatek, rozmiar_x, rozmiar_y);
-    Spaceship statek2(textureStatek2, rozmiar_x, rozmiar_y);
+    Spaceship statek2(textureStatek2, rozmiar_x/4, rozmiar_y);
     boss boss(textureBoss, rozmiar_x, rozmiar_y);
 
 
@@ -648,6 +646,10 @@ void poziom_2_2()
     dodaj_pociski(pociski, textureShot, statek);
     dodaj_pociski(pociski_2, textureShot2, statek2);
 
+    //Kontenery z boostami
+    std::vector<std::unique_ptr<boost>> boosty1;
+    std::vector<std::unique_ptr<boost>> boosty2;
+
     //Muzyka
     sf::Music muzyka;
     if(!muzyka.openFromFile("./../spacehero/music/intro.wav"))
@@ -666,6 +668,30 @@ void poziom_2_2()
 
     sf::Music dzwiek2;
     if(!dzwiek2.openFromFile("./../spacehero/music/shot2.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music dzwiek_boost;
+    if(!dzwiek_boost.openFromFile("./../spacehero/music/boost.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music dzwiek_boost2;
+    if(!dzwiek_boost2.openFromFile("./../spacehero/music/boost.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music unboost;
+    if(!unboost.openFromFile("./../spacehero/music/unboost.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music unboost2;
+    if(!unboost2.openFromFile("./../spacehero/music/unboost.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
@@ -765,6 +791,9 @@ void poziom_2_2()
     bool pauza = false;
     bool fala1 = false;
     bool fala2 = false;
+    bool boosty_1 = false;
+    bool boost_rozmiar = false;
+    bool boost_potwory = false;
     window.setFramerateLimit(60);
       while (window.isOpen()) {
           // check all the window's events that were triggered since the last iteration of the loop
@@ -848,6 +877,16 @@ void poziom_2_2()
                  el->poruszaj(elapsed,windowBounds, rozmiar_x, rozmiar_y);
               }
 
+              for(auto &b : boosty1)
+              {
+                  b->poruszaj(elapsed);
+              }
+
+              for(auto &b2 : boosty2)
+              {
+                  b2->poruszaj(elapsed);
+              }
+
              zderzenia(statek, pociski, przeciwnicy, textureShot, zderzenie);
              zderzenia(statek2, pociski_2, przeciwnicy, textureShot2, zderzenie);
 
@@ -872,6 +911,74 @@ void poziom_2_2()
               clock.restart();
           }
 
+
+          //Sekcja boostow
+          if((statek.pobierz_liczbe_punktow() == 50 || statek2.pobierz_liczbe_punktow() == 50) && (boosty_1 == false))
+          {
+              dodaj_boosty_1(boosty1, textureBoost, rozmiar_x, rozmiar_y);
+              boosty_1 = true;
+          }
+
+          //Boosty pierwsze
+          for(auto itr = boosty1.begin(); itr != boosty1.end();)
+          {
+              if(((*itr)->getGlobalBounds().intersects(statek.getGlobalBounds()) || (*itr)->getGlobalBounds().intersects(statek2.getGlobalBounds()))
+                  && (boost_rozmiar == false) && (boost_potwory == false))
+              {
+                  int losowanie = rand()%2;
+                  itr = boosty1.erase(itr);
+                  dzwiek_boost.play();
+                  if(losowanie == 0)
+                  {
+                      statek.setScale(0.2,0.2);
+                      statek2.setScale(0.2,0.2);
+                      boost_rozmiar = true;
+                      std::cout << "WASZE STATKI SIE ZMNIEJSZYLY!" << std::endl;
+                  }
+                  if(losowanie == 1)
+                  {
+                      for(auto it = przeciwnicy.begin(); it != przeciwnicy.end(); it++)
+                      {
+                          (*it)->ustaw_predkosc(0,0);
+                      }
+                      boost_potwory = true;
+                      std::cout << "PRZECIWNICY ZAMARLI BEZ RUCHU!" << std::endl;
+                  }
+              }
+              else
+              {
+                  itr++;
+              }
+          }
+
+          //Warunek kiedy konczy sie pierwszy boost
+          if((statek.pobierz_liczbe_punktow() == 150 || statek2.pobierz_liczbe_punktow() == 150) && (boost_rozmiar == true))
+          {
+              statek.setScale(0.3,0.3);
+              statek2.setScale(0.3,0.3);
+              unboost.play();
+          }
+          if((statek.pobierz_liczbe_punktow() == 100 || statek2.pobierz_liczbe_punktow() == 100) && (boost_potwory == true))
+          {
+              for(auto it = przeciwnicy.begin(); it != przeciwnicy.end(); it++)
+              {
+                  (*it)->ustaw_predkosc(0,10);
+                  unboost.play();
+              }
+          }
+
+          //Usuwanie boostow po wyjsciu za okno
+          for(auto itr = boosty1.begin(); itr!= boosty1.end();)
+          {
+              if((*itr)->getGlobalBounds().intersects(hide_collision.getGlobalBounds()))
+              {
+              itr = boosty1.erase(itr);
+              }
+              else
+              {
+                  itr++;
+              }
+          }
           // clear the window with black color
           window.clear(sf::Color::Black);
 
@@ -966,6 +1073,10 @@ void poziom_2_2()
               window.draw(*p2);
           }
 
+          for(auto &b : boosty1)
+          {
+              window.draw(*b);
+          }
 
           if(pauza)
           {
@@ -1509,7 +1620,7 @@ void gra_1()
 
          for(auto itr = boosty2.begin(); itr != boosty2.end();)
          {
-             if((*itr)->getGlobalBounds().intersects(statek.getGlobalBounds()) && boost_rozmiar_2 == false)
+             if((*itr)->getGlobalBounds().intersects(statek.getGlobalBounds()) && (boost_rozmiar_2 == false) && (boost_przeciwnicy_2 == false))
              {
                  int losowanie = rand()%2;
                  itr = boosty2.erase(itr);
@@ -1667,6 +1778,8 @@ void gra_2()
     sf::Texture textureShot = loadTexture("./../spacehero/graphics/shot.png");
     sf::Texture textureStatek2 = loadTexture("./../spacehero/graphics/spaceship2.png");
     sf::Texture textureShot2 = loadTexture("./../spacehero/graphics/shot2.png");
+    sf::Texture textureBoost = loadTexture("./../spacehero/graphics/boost.png");
+    sf::Texture textureBoost2 = loadTexture("./../spacehero/graphics/boost2.png");
 
     //Rozmiar okna gry
     int rozmiar_x = 1080;
@@ -1695,6 +1808,30 @@ void gra_2()
 
     sf::Music zderzenie;
     if(!zderzenie.openFromFile("./../spacehero/music/zderzenie.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music dzwiek_boost;
+    if(!dzwiek_boost.openFromFile("./../spacehero/music/boost.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music unboost;
+    if(!unboost.openFromFile("./../spacehero/music/unboost.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music dzwiek_boost2;
+    if(!dzwiek_boost2.openFromFile("./../spacehero/music/boost.wav"))
+    {
+        std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
+    }
+
+    sf::Music unboost2;
+    if(!unboost2.openFromFile("./../spacehero/music/unboost.wav"))
     {
         std::cerr << "Nie udalo sie wczytac dzwieku!" << std::endl;
     }
@@ -1739,8 +1876,9 @@ void gra_2()
     //Kontener pociskow gracza 2
     std::vector<std::unique_ptr<AnimowaneObiekty>> pociski_2;
 
-    //Pociski bossa
-    std::vector<std::unique_ptr<AnimowaneObiekty>> pociski_boss;
+    //Kontenery z boostami
+    std::vector<std::unique_ptr<boost>> boosty1;
+    std::vector<std::unique_ptr<boost>> boosty2;
 
     //Dodanie przeciwnikow do kontenera
     dodaj_przeciwnikow_1(przeciwnicy, textureUfo, textureAsteroida, rozmiar_x, rozmiar_y);
@@ -1844,6 +1982,12 @@ void gra_2()
     bool pauza = false;
     bool fala_1 = false;
     bool fala_2 = false;
+    bool boosty_1 = false;
+    bool boosty_2 = false;
+    bool boost_rozmiar = false;
+    bool boost_potwory = false;
+    bool boost_rozmiar2 = false;
+    bool boost_przeciwnicy_2 = false;
     window.setFramerateLimit(60);
       while (window.isOpen()) {
           // check all the window's events that were triggered since the last iteration of the loop
@@ -1931,6 +2075,16 @@ void gra_2()
                   el->poruszaj(elapsed,windowBounds, rozmiar_x, rozmiar_y);
               }
 
+              for(auto &b : boosty1)
+              {
+                  b->poruszaj(elapsed);
+              }
+
+              for(auto &b2 : boosty2)
+              {
+                  b2->poruszaj(elapsed);
+              }
+
               zderzenia(statek, pociski, przeciwnicy,  textureShot, zderzenie);
               zderzenia(statek2, pociski_2, przeciwnicy, textureShot2, zderzenie);
 
@@ -1979,6 +2133,151 @@ void gra_2()
           {
               clock.restart();
           }
+
+          //Boosty pierwsze
+          if(((statek.pobierz_liczbe_punktow() == 50) || (statek2.pobierz_liczbe_punktow() == 50)) && (boosty_1 == false))
+          {
+              dodaj_boosty_1(boosty1, textureBoost, rozmiar_x, rozmiar_y);
+              boosty_1 = true;
+          }
+
+          //Boosty zmieniajace wielkosc statku i zamrazajace przeciwnikow w miejscu
+          for(auto itr = boosty1.begin(); itr != boosty1.end();)
+          {
+              if(((*itr)->getGlobalBounds().intersects(statek.getGlobalBounds()) || ((*itr)->getGlobalBounds().intersects(statek2.getGlobalBounds())))
+                      && (boost_rozmiar == false) && (boost_potwory == false))
+              {
+                  int losowanie = rand()%2;
+                  itr = boosty1.erase(itr);
+                  dzwiek_boost.play();
+                  if(losowanie == 0)
+                  {
+                      statek.setScale(0.2,0.2);
+                      statek2.setScale(0.2,0.2);
+                      boost_rozmiar = true;
+                      std::cout << "WASZE STATKI SIE ZMNIEJSZYLY!" << std::endl;
+                  }
+                  if(losowanie == 1)
+                  {
+                      for(auto it = przeciwnicy.begin(); it != przeciwnicy.end(); it++)
+                      {
+                          (*it)->ustaw_predkosc(0,0);
+                      }
+                      boost_potwory = true;
+                      std::cout << "PRZECIWNICY ZAMARLI BEZ RUCHU!" << std::endl;
+                  }
+              }
+              else
+              {
+                  itr++;
+              }
+          }
+
+          //Kiedy konczy sie pierwszy boost
+          if((statek.pobierz_liczbe_punktow() == 250 || statek2.pobierz_liczbe_punktow() == 250) && (boost_rozmiar == true))
+          {
+              statek.setScale(0.3,0.3);
+              statek2.setScale(0.3,0.3);
+              unboost.play();
+          }
+          if((statek.pobierz_liczbe_punktow() == 100 || statek2.pobierz_liczbe_punktow() == 100) && (boost_potwory == true))
+          {
+              for(auto it = przeciwnicy.begin(); it != przeciwnicy.end(); it++)
+              {
+                  (*it)->ustaw_predkosc(0,10);
+                  unboost.play();
+              }
+          }
+
+          //Pojawienie sie drugich boostow
+          if((statek.pobierz_liczbe_punktow() == 350 || statek2.pobierz_liczbe_punktow() == 350) && (boosty_2 == false))
+          {
+              dodaj_boosty_2(boosty2, textureBoost2, rozmiar_x, rozmiar_y);
+              boosty_2 = true;
+          }
+
+          for(auto itr = boosty2.begin(); itr != boosty2.end();)
+          {
+              if(((*itr)->getGlobalBounds().intersects(statek.getGlobalBounds()) || ((*itr)->getGlobalBounds().intersects(statek2.getGlobalBounds())))
+                      && (boost_rozmiar2 == false))
+              {
+                  int losowanie = rand()%2;
+                  itr = boosty2.erase(itr);
+                  dzwiek_boost2.play();
+                  if(losowanie == 0)
+                  {
+                      statek.setScale(0.2,0.2);
+                      statek2.setScale(0.2,0.2);
+                      std::cout <<"WASZE STATKI SIE ZMNIEJSZYLY!" << std::endl;
+                      boost_rozmiar2 = true;
+                  }
+                  if(losowanie == 1)
+                  {
+                      for(auto it = przeciwnicy.begin(); it != przeciwnicy.end(); it++)
+                      {
+                          (*it)->ustaw_predkosc(0,0);
+                          Ufo *ufo = dynamic_cast<Ufo *>(it->get());
+                          if(ufo != nullptr)
+                          {
+                              ufo->setScale(0.3,0.3);
+                          }
+                      }
+                      boost_przeciwnicy_2 = true;
+                      std::cout << "PRZECIWNICY ZAMRALI! LATWIEJSZY CEL!" << std::endl;
+                  }
+
+              }
+              else
+              {
+                  itr++;
+              }
+          }
+
+          //Kiedy konczy sie drugi boost
+          if((statek.pobierz_liczbe_punktow() == 500 || statek2.pobierz_liczbe_punktow() == 500) && (boost_rozmiar2 == true))
+          {
+              statek.setScale(0.3,0.3);
+              statek2.setScale(0.3,0.3);
+              unboost2.play();
+          }
+          if((statek.pobierz_liczbe_punktow() == 450 || statek2.pobierz_liczbe_punktow() == 450) && (boost_przeciwnicy_2 == true))
+          {
+              for(auto it = przeciwnicy.begin(); it != przeciwnicy.end(); it++)
+              {
+                  (*it)->ustaw_predkosc(0,10);
+                  Ufo *ufo = dynamic_cast<Ufo *>(it->get());
+                  if(ufo != nullptr)
+                  {
+                      ufo->setScale(0.2,0.2);
+                  }
+              }
+              unboost2.play();
+          }
+
+          //Pętla odpowiedzialna za boosty
+           for(auto itr = boosty1.begin(); itr!= boosty1.end();)
+           {
+               if((*itr)->getGlobalBounds().intersects(hide_collision.getGlobalBounds()))
+               {
+               itr = boosty1.erase(itr);
+               }
+               else
+               {
+                   itr++;
+               }
+           }
+
+           for(auto itr = boosty2.begin(); itr!= boosty2.end();)
+           {
+               if((*itr)->getGlobalBounds().intersects(hide_collision.getGlobalBounds()))
+               {
+               itr = boosty2.erase(itr);
+               }
+               else
+               {
+                   itr++;
+               }
+           }
 
           // clear the window with black color
           window.clear(sf::Color::Black);
@@ -2038,6 +2337,15 @@ void gra_2()
               window.draw(*p2);
           }
 
+          for(auto &b : boosty1)
+          {
+              window.draw(*b);
+          }
+
+          for(auto &b2 : boosty2)
+          {
+              window.draw(*b2);
+          }
           //Wyswietlenie napisu pauzy
           if(pauza)
           {
@@ -2057,6 +2365,10 @@ void opis()
     sf::Texture textureP = loadTexture("./../spacehero/graphics/p.png");
     sf::Texture textureSpacja = loadTexture("./../spacehero/graphics/spacja.png");
     sf::Texture textureLewy = loadTexture("./../spacehero/graphics/lewy.png");
+    sf::Texture textureLewa = loadTexture("./../spacehero/graphics/lewa.png");
+    sf::Texture texturePrawy = loadTexture("./../spacehero/graphics/prawy.png");
+    sf::Texture textureEnter = loadTexture("./../spacehero/graphics/enter.png");
+
 
     //Rozmiar okna
     int rozmiar_x = 600;
@@ -2085,6 +2397,8 @@ void opis()
     sf::Text pauza;
     sf::Text strzal;
     sf::Text mysz;
+    sf::Text drugie_sterowanie;
+    sf::Text enter;
 
     //Napis sterowanie
     //Stworzenie fontu i ustawienie
@@ -2131,6 +2445,20 @@ void opis()
     mysz.setStyle(sf::Text::Bold);
     mysz.setPosition(rozmiar_x/2 - 50, rozmiar_y/2 - rozmiar_y/2 + 350);
 
+    drugie_sterowanie.setFont(font);
+    drugie_sterowanie.setString("<- , -> ruch drugiego gracza");
+    drugie_sterowanie.setCharacterSize(20);
+    drugie_sterowanie.setFillColor(sf::Color::White);
+    drugie_sterowanie.setStyle(sf::Text::Bold);
+    drugie_sterowanie.setPosition(rozmiar_x/2 - 50, rozmiar_y/2 - rozmiar_y/2 + 450);
+
+    enter.setFont(font);
+    enter.setString("Enter - strzal drugiego gracza");
+    enter.setCharacterSize(20);
+    enter.setFillColor(sf::Color::White);
+    enter.setStyle(sf::Text::Bold);
+    enter.setPosition(rozmiar_x/2 - 60, rozmiar_y/2 - rozmiar_y/2 + 525);
+
     //Grafiki
     sf::Sprite spritetlo;
     spritetlo.setTexture(textureTlo);
@@ -2162,6 +2490,20 @@ void opis()
     lewy.setScale(0.2,0.2);
     lewy.setPosition(rozmiar_x/2 - 180, rozmiar_y/2 - rozmiar_y/2 + 300);
 
+    sf::Sprite lewa;
+    lewa.setTexture(textureLewa);
+    lewa.setScale(1.5,1.5);
+    lewa.setPosition(rozmiar_x/2 - 250, rozmiar_y/2 - rozmiar_y/2 + 450);
+
+    sf::Sprite prawa;
+    prawa.setTexture(texturePrawy);
+    prawa.setScale(1.5,1.5);
+    prawa.setPosition(rozmiar_x/2 - 180, rozmiar_y/2 - rozmiar_y/2 + 450);
+
+    sf::Sprite enter_;
+    enter_.setTexture(textureEnter);
+    enter_.setScale(0.8,0.8);
+    enter_.setPosition(rozmiar_x/2 - 180, rozmiar_y/2 - rozmiar_y/2 + 525);
 
     while (window.isOpen()) {
         // check all the window's events that were triggered since the last iteration of the loop
@@ -2185,12 +2527,17 @@ void opis()
         window.draw(p);
         window.draw(spacja);
         window.draw(lewy);
+        window.draw(lewa);
+        window.draw(prawa);
+        window.draw(enter_);
         window.draw(sterowanie);
         window.draw(ruch);
         window.draw(ruch1);
         window.draw(pauza);
         window.draw(strzal);
         window.draw(mysz);
+        window.draw(drugie_sterowanie);
+        window.draw(enter);
 
 
         // end the current frame
@@ -2352,7 +2699,6 @@ void tryb_gry()
                   }
 
 }
-
 
           // clear the window with black color
           window.clear(sf::Color::Black);
